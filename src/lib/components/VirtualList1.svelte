@@ -1,0 +1,48 @@
+<script lang="ts">
+	import { tick } from 'svelte';
+	import VirtualScroll from 'svelte-virtual-scroll-list';
+	import { createSequenceGenerator, randomInteger } from '../mock';
+	import TestItem from './TestItem.svelte';
+
+	const getItemId = createSequenceGenerator();
+
+	let items: any[] = [];
+	addItems(true, 100);
+
+	let list: VirtualScroll;
+
+	function addItems(top = true, count = 10) {
+		let new_items = [];
+		for (let i = 0; i < count; i++)
+			new_items.push({ uniqueKey: getItemId(), height: randomInteger(20, 60) });
+		if (top) items = [...new_items, ...items];
+		else items = [...items, ...new_items];
+	}
+</script>
+
+<div class="vs">
+	<VirtualScroll bind:this={list} data={items} key="uniqueKey" let:data>
+		<div slot="header">This is a header</div>
+		<TestItem {...data} />
+		<div slot="footer">This is a footer</div>
+	</VirtualScroll>
+</div>
+<button on:click={() => addItems(false)}>Add 10 to bottom</button>
+<button on:click={list.scrollToBottom}>To bottom</button>
+<button
+	on:click={async () => {
+		addItems(false, 1);
+		await tick();
+		list.scrollToBottom();
+	}}
+	>Add 1 and scroll to bottom
+</button>
+<button on:click={() => (items[15].height = randomInteger(10, 150))}
+	>Random height for 15 item</button
+>
+
+<style>
+	.vs {
+		height: 300px;
+	}
+</style>
