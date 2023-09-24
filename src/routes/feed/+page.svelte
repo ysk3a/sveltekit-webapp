@@ -36,7 +36,7 @@
 	<VirtualScroll bind:this={list} data={items} key="uniqueKey" let:data>
 		<div slot="header">This is a header</div>
 		<!-- <TestItem {...data} /> -->
-		<AccordionTest uniqueKey={data.uniqueKey} />
+		<AccordionTest uniqueKey={data.uniqueKey} height={data.height} />
 		<div slot="footer">This is a footer</div>
 	</VirtualScroll>
 </div>
@@ -59,5 +59,6 @@
 <style>
 	.vs {
 		height: calc(100vh - 50px);
+		/* height: 300px; */
 	}
 </style>

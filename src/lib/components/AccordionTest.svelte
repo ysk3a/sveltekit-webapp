@@ -1,16 +1,18 @@
 <script lang="ts">
 	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
 	export let uniqueKey: string | number;
+	export let height: number;
 </script>
 
 <Accordion>
-	<AccordionItem open>
+	<AccordionItem>
 		<svelte:fragment slot="lead">(icon)</svelte:fragment>
 		<svelte:fragment slot="summary">(Panel 1: {uniqueKey})</svelte:fragment>
-		<svelte:fragment slot="content">(content)</svelte:fragment>
+		<svelte:fragment slot="content">
+			<div class="content-container" style="height: {height}px" />
+		</svelte:fragment>
 	</AccordionItem>
 </Accordion>
-
 <!-- <script lang="ts">
 	import Accordion, { Panel, Header, Content } from '@smui-extra/accordion';
 	import IconButton, { Icon } from '@smui/icon-button';
@@ -35,3 +37,13 @@
 
 <style>
 </style> -->
+
+<style>
+	div.content-container {
+		/* Don't set margin top and bottom together! It will break size counting */
+		padding: 8px;
+		color: black;
+		background-color: #f6f6f6;
+		border-radius: 20px;
+	}
+</style>
