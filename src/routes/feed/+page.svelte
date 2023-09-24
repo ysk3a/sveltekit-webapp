@@ -6,7 +6,7 @@
 
 	const getItemId = createSequenceGenerator();
 
-	let items = [];
+	let items: any[] = [];
 	addItems(true, 100);
 
 	let list: VirtualScroll;
@@ -19,6 +19,7 @@
 		else items = [...items, ...new_items];
 	}
 	import { onMount } from 'svelte';
+	import AccordionTest from '$lib/components/AccordionTest.svelte';
 
 	onMount(() => {
 		// console.log(':: feed/+page.svelte list=', list);
@@ -34,11 +35,12 @@
 <div class="vs">
 	<VirtualScroll bind:this={list} data={items} key="uniqueKey" let:data>
 		<div slot="header">This is a header</div>
-		<TestItem {...data} />
+		<!-- <TestItem {...data} /> -->
+		<AccordionTest uniqueKey={data.uniqueKey} />
 		<div slot="footer">This is a footer</div>
 	</VirtualScroll>
 </div>
-<button class="btn variant-filled" on:click={addItems}>Add 10 to top</button>
+<!-- <button class="btn variant-filled" on:click={addItems}>Add 10 to top</button> -->
 <button class="btn variant-filled" on:click={() => addItems(false)}>Add 10 to bottom</button>
 <button class="btn variant-filled" on:click={list.scrollToBottom}>To bottom</button>
 <button
