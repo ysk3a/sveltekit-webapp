@@ -14,7 +14,7 @@
 	function addItems(top = true, count = 10) {
 		let new_items = [];
 		for (let i = 0; i < count; i++)
-			new_items.push({ uniqueKey: getItemId(), height: randomInteger(20, 660) });
+			new_items.push({ uniqueKey: getItemId(), height: randomInteger(20, 660), open: false });
 		if (top) items = [...new_items, ...items];
 		else items = [...items, ...new_items];
 	}
@@ -30,13 +30,25 @@
 			list.scrollToBottom();
 		}
 	});
+	function handleAccordionItemToggle(event: CustomEvent) {
+		console.log('::feed', event);
+		let updateItem = items.find((item: any) => item.uniqueKey === event.detail.uniqueKey);
+		updateItem.open = event.detail.accordionItemDetail.open;
+		console.log('::handle', updateItem);
+	}
+	// $: console.log('::feed open', );
 </script>
 
 <div class="vs">
 	<VirtualScroll bind:this={list} data={items} key="uniqueKey" let:data>
 		<div slot="header">This is a header</div>
 		<!-- <TestItem {...data} /> -->
-		<AccordionTest uniqueKey={data.uniqueKey} height={data.height} />
+		<AccordionTest
+			on:openItem={handleAccordionItemToggle}
+			open={data.open}
+			uniqueKey={data.uniqueKey}
+			height={data.height}
+		/>
 		<div slot="footer">This is a footer</div>
 	</VirtualScroll>
 </div>
