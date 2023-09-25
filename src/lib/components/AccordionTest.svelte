@@ -2,7 +2,8 @@
 	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
 	export let uniqueKey: string | number;
 	export let height: number;
-	export let open: boolean = false;
+	export let open: boolean;
+	export let openedItems: any[] = [];
 	import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
 	// type AccordionItemToggle = { event: Event; id: string; open: boolean; autocollapse: boolean };
@@ -15,11 +16,13 @@
 			uniqueKey: uniqueKey
 		});
 	}
-	$: console.log('::open', uniqueKey, open);
+	$: console.log('::open', uniqueKey, open, openedItems);
 </script>
 
 <Accordion>
-	<AccordionItem class="ck-accordion-item" bind:open on:toggle={accordionItemToggle}>
+	<!-- 		open={openedItems.find((item) => item.uniqueKey === uniqueKey)?.open ?? false}
+ -->
+	<AccordionItem class="ck-accordion-item" {open} on:toggle={accordionItemToggle}>
 		<svelte:fragment slot="lead">(icon)</svelte:fragment>
 		<svelte:fragment slot="summary">(Panel 1: {uniqueKey} {open})</svelte:fragment>
 		<svelte:fragment slot="content">

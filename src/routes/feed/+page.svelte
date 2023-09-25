@@ -30,13 +30,26 @@
 			list.scrollToBottom();
 		}
 	});
+	let openedItems: { uniqueKey: number; open: boolean }[] = []; // max 30 items opened
+
 	function handleAccordionItemToggle(event: CustomEvent) {
 		console.log('::feed', event);
-		let updateItem = items.find((item: any) => item.uniqueKey === event.detail.uniqueKey);
-		updateItem.open = event.detail.accordionItemDetail.open;
-		console.log('::handle', updateItem);
+		// logic: keep array of 30. fifo queue to store opened accordion item
+		// user toggle on expand in AccordionText.svelte, forwards the event
+		// to this page. so i guess for every render loop through 30 items.
+		// any better way? stores?
+
+		if (openedItems.length === 30) {
+			openedItems.shift();
+		}
+		openedItems.push({
+			uniqueKey: event.detail.uniqueKey,
+			open: event.detail.accordionItemDetail.open
+		});
+		// openedItems = openedItems; // causes jump. why?
 	}
-	// $: console.log('::feed open', );
+
+	$: console.log('::feed open', openedItems);
 </script>
 
 <div class="vs">
@@ -45,7 +58,7 @@
 		<!-- <TestItem {...data} /> -->
 		<AccordionTest
 			on:openItem={handleAccordionItemToggle}
-			open={data.open}
+			open={openedItems.find((oi) => oi.uniqueKey === data.uniqueKey)?.open ?? false}
 			uniqueKey={data.uniqueKey}
 			height={data.height}
 		/>
