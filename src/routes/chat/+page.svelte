@@ -20,6 +20,7 @@
 	}
 	import { onMount } from 'svelte';
 	import AccordionTest from '$lib/components/AccordionTest.svelte';
+	import EditorTipTap from '$lib/components/EditorTipTap.svelte';
 
 	onMount(() => {
 		// console.log(':: feed/+page.svelte list=', list);
@@ -44,7 +45,8 @@
 </div>
 <!-- <button class="btn variant-filled" on:click={addItems}>Add 10 to top</button> -->
 <div class="user-entry-container">
-	<div class="input-container">
+	<EditorTipTap />
+	<!-- <div class="input-container">
 		<textarea
 			class="textarea"
 			rows="4"
@@ -63,7 +65,7 @@
 		<button class="btn variant-filled" on:click={() => (items[15].height = randomInteger(10, 150))}
 			>Random height for 15 item</button
 		>
-	</div>
+	</div> -->
 </div>
 
 <style>

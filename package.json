@@ -42,6 +42,12 @@
   },
   "type": "module",
   "dependencies": {
-    "@floating-ui/dom": "1.5.3"
+    "@floating-ui/dom": "1.5.3",
+    "@tiptap/core": "^2.1.11",
+    "@tiptap/extension-mention": "^2.1.11",
+    "@tiptap/pm": "^2.1.11",
+    "@tiptap/starter-kit": "^2.1.11",
+    "@tiptap/suggestion": "^2.1.11",
+    "tippy.js": "^6.3.7"
   }
 }
