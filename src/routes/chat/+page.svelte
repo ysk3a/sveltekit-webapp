@@ -92,35 +92,10 @@
 		background-color: darkkhaki;
 		overflow: auto;
 	}
-	/* .row-1-2 .textarea {
+	.row-1-2 .textarea {
 		height: 100%;
-	} */
-	/* .room-content {
-		position: relative;
-		display: -webkit-box;
-		display: -ms-flexbox;
-		display: flex;
-		-webkit-box-orient: vertical;
-		-webkit-box-direction: normal;
-		-ms-flex-direction: column;
-		flex-direction: column;
-		min-width: 0;
-		min-height: 0;
-		-webkit-box-flex: 1;
-		-ms-flex: 1 1 auto;
-		flex: 1 1 auto;
-	} */
-	/* height: 300px; */
-	.vs {
-		height: calc(100vh - 105px);
 	}
-	/* 
-	.user-entry-container {
-		border: 1px solid white;
-		resize: vertical;
-	} */
-	/* .input-container {
-		display: flex;
-		flex-direction: row;
-	} */
+	.vs {
+		height: calc(100vh - 160px);
+	}
 </style>

@@ -52,38 +52,86 @@
 	$: console.log('::feed open', openedItems);
 </script>
 
-<div class="vs">
-	<VirtualScroll bind:this={list} data={items} key="uniqueKey" let:data>
-		<div slot="header">This is a header</div>
-		<!-- <TestItem {...data} /> -->
-		<AccordionTest
-			on:openItem={handleAccordionItemToggle}
-			open={openedItems.find((oi) => oi.uniqueKey === data.uniqueKey)?.open ?? false}
-			uniqueKey={data.uniqueKey}
-			height={data.height}
-		/>
-		<div slot="footer">This is a footer</div>
-	</VirtualScroll>
+<div id="main-container">
+	<div class="col-1">
+		<div class="row-1">
+			<div class="row-1-1">
+				<div class="vs">
+					<VirtualScroll bind:this={list} data={items} key="uniqueKey" let:data>
+						<div slot="header">This is a header</div>
+						<!-- <TestItem {...data} /> -->
+						<AccordionTest
+							on:openItem={handleAccordionItemToggle}
+							open={openedItems.find((oi) => oi.uniqueKey === data.uniqueKey)?.open ?? false}
+							uniqueKey={data.uniqueKey}
+							height={data.height}
+						/>
+						<div slot="footer">This is a footer</div>
+					</VirtualScroll>
+				</div>
+			</div>
+			<div class="row-1-2">
+				<!-- <button class="btn variant-filled" on:click={addItems}>Add 10 to top</button> -->
+				<button class="btn variant-filled" on:click={() => addItems(false)}>Add 10 to bottom</button
+				>
+				<button class="btn variant-filled" on:click={list.scrollToBottom}>To bottom</button>
+				<button
+					class="btn variant-filled"
+					on:click={async () => {
+						addItems(false, 1);
+						await tick();
+						list.scrollToBottom();
+					}}
+					>Add 1 and scroll to bottom
+				</button>
+				<button
+					class="btn variant-filled"
+					on:click={() => (items[15].height = randomInteger(10, 150))}
+					>Random height for 15 item</button
+				>
+				<hr />
+				<button class="btn variant-filled">other random btn</button>
+				<button class="btn variant-filled">other random btn</button>
+				<button class="btn variant-filled">other random btn</button>
+				<button class="btn variant-filled">other random btn</button>
+				<button class="btn variant-filled">other random btn</button>
+				<button class="btn variant-filled">other random btn</button>
+				<button class="btn variant-filled">other random btn</button>
+			</div>
+		</div>
+	</div>
 </div>
-<!-- <button class="btn variant-filled" on:click={addItems}>Add 10 to top</button> -->
-<button class="btn variant-filled" on:click={() => addItems(false)}>Add 10 to bottom</button>
-<button class="btn variant-filled" on:click={list.scrollToBottom}>To bottom</button>
-<button
-	class="btn variant-filled"
-	on:click={async () => {
-		addItems(false, 1);
-		await tick();
-		list.scrollToBottom();
-	}}
-	>Add 1 and scroll to bottom
-</button>
-<button class="btn variant-filled" on:click={() => (items[15].height = randomInteger(10, 150))}
-	>Random height for 15 item</button
->
 
 <style>
+	#main-container {
+		/* padding: 10px; */
+		height: 100%;
+		display: grid;
+		/* grid-template-columns: 3fr; */
+		/* grid-template-rows: 1fr; */
+	}
+
+	.col-1 {
+		display: grid;
+		overflow: auto;
+		/* grid-template-rows: 1fr 1fr; */
+	}
+
+	.row-1 {
+		overflow: auto;
+		display: grid;
+		grid-template-rows: 1fr 100px;
+		grid-template-rows: minmax(0, 1fr) 100px;
+	}
+
+	.row-1-1 {
+		overflow: auto;
+	}
+
+	.row-1-2 {
+		overflow: auto;
+	}
 	.vs {
-		height: calc(100vh - 50px);
-		/* height: 300px; */
+		height: calc(100vh - 160px);
 	}
 </style>
