@@ -35,38 +35,66 @@
 <!-- <div class="room-content">
 
 </div> -->
-<div class="vs">
-	<VirtualScroll bind:this={list} data={items} key="uniqueKey" let:data>
-		<div slot="header">This is a header</div>
-		<TestItem {...data} />
-		<div slot="footer">This is a footer</div>
-	</VirtualScroll>
-</div>
-<!-- <button class="btn variant-filled" on:click={addItems}>Add 10 to top</button> -->
-<div class="user-entry-container">
-	<div class="input-container">
-		<textarea
-			class="textarea"
-			rows="4"
-			placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
-		/>
-
-		<button
-			class="btn variant-filled"
-			on:click={async () => {
-				addItems(false, 1);
-				await tick();
-				list.scrollToBottom();
-			}}
-			>Add 1 and scroll to bottom
-		</button>
-		<button class="btn variant-filled" on:click={() => (items[15].height = randomInteger(10, 150))}
-			>Random height for 15 item</button
-		>
+<div id="main-container">
+	<div class="col-1">
+		<div class="row-1">
+			<div class="row-1-1">
+				<!-- <div class="test-height">row-1-1</div> -->
+				<div class="vs">
+					<VirtualScroll bind:this={list} data={items} key="uniqueKey" let:data>
+						<div slot="header">This is a header</div>
+						<TestItem {...data} />
+						<div slot="footer">This is a footer</div>
+					</VirtualScroll>
+				</div>
+			</div>
+			<div class="row-1-2">
+				<!-- <div class="test-height">row-1-2</div> -->
+				<textarea
+					class="textarea"
+					placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+				/>
+			</div>
+		</div>
 	</div>
 </div>
 
 <style>
+	#main-container {
+		/* padding: 10px; */
+		background-color: bisque;
+		height: 100%;
+		display: grid;
+		/* grid-template-columns: 3fr; */
+		/* grid-template-rows: 1fr; */
+	}
+
+	.col-1 {
+		display: grid;
+		overflow: auto;
+		/* grid-template-rows: 1fr 1fr; */
+	}
+
+	.row-1 {
+		background-color: cadetblue;
+		overflow: auto;
+		display: grid;
+		grid-template-rows: 1fr 100px;
+		grid-template-rows: minmax(0, 1fr) 100px;
+	}
+
+	.row-1-1 {
+		background-color: crimson;
+		overflow: auto;
+	}
+
+	.row-1-2 {
+		background-color: darkkhaki;
+		overflow: auto;
+	}
+	/* .row-1-2 .textarea {
+		height: 100%;
+	} */
 	/* .room-content {
 		position: relative;
 		display: -webkit-box;
@@ -82,16 +110,17 @@
 		-ms-flex: 1 1 auto;
 		flex: 1 1 auto;
 	} */
+	/* height: 300px; */
 	.vs {
 		height: calc(100vh - 105px);
-		/* height: 300px; */
 	}
+	/* 
 	.user-entry-container {
 		border: 1px solid white;
 		resize: vertical;
-	}
-	.input-container {
+	} */
+	/* .input-container {
 		display: flex;
 		flex-direction: row;
-	}
+	} */
 </style>

@@ -23,9 +23,8 @@
 </script>
 
 <!-- App Shell -->
-<AppShell>
+<AppShell regionPage="overflow-hidden">
 	<svelte:fragment slot="header">
-		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
 				<strong class="text-xl uppercase">Skeleton</strong>
@@ -47,10 +46,8 @@
 		</AppBar>
 	</svelte:fragment>
 	<svelte:fragment slot="sidebarLeft">
-		<!-- Hidden below Tailwind's large breakpoint -->
 		<div id="sidebar-left" class="hidden lg:block">
 			<nav class="list-nav">
-				<!-- (optionally you can provide a label here) -->
 				<ul>
 					<li>
 						<a href="/">
@@ -76,13 +73,8 @@
 		</div>
 	</svelte:fragment>
 	<svelte:fragment slot="sidebarRight">
-		<!-- Hidden below Tailwind's large breakpoint -->
 		<div id="sidebar-right" class="hidden lg:block">Right Sidebar</div>
 	</svelte:fragment>
-	<!-- (pageHeader) -->
-	<!-- Router Slot -->
+
 	<slot />
-	<!-- ---- / ---- -->
-	<!-- <svelte:fragment slot="pageFooter">Page Footer</svelte:fragment> -->
-	<!-- (footer) -->
 </AppShell>
