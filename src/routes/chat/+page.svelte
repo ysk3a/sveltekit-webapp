@@ -1,5 +1,97 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { afterUpdate, tick } from 'svelte';
+	import VirtualScroll from 'svelte-virtual-scroll-list';
+	import { createSequenceGenerator, randomInteger } from '$lib/mock';
+	import TestItem from '$lib/components/TestItem.svelte';
 
-	onMount(() => {});
+	const getItemId = createSequenceGenerator();
+
+	let items: any[] = [];
+	addItems(true, 100);
+
+	let list: VirtualScroll;
+
+	function addItems(top = true, count = 10) {
+		let new_items = [];
+		for (let i = 0; i < count; i++)
+			new_items.push({ uniqueKey: getItemId(), height: randomInteger(20, 660), open: false });
+		if (top) items = [...new_items, ...items];
+		else items = [...items, ...new_items];
+	}
+	import { onMount } from 'svelte';
+	import AccordionTest from '$lib/components/AccordionTest.svelte';
+
+	onMount(() => {
+		// console.log(':: feed/+page.svelte list=', list);
+	});
+	afterUpdate(() => {
+		console.log('::afterUpdate');
+		if (list) {
+			list.scrollToBottom();
+		}
+	});
 </script>
+
+<!-- <div class="room-content">
+
+</div> -->
+<div class="vs">
+	<VirtualScroll bind:this={list} data={items} key="uniqueKey" let:data>
+		<div slot="header">This is a header</div>
+		<TestItem {...data} />
+		<div slot="footer">This is a footer</div>
+	</VirtualScroll>
+</div>
+<!-- <button class="btn variant-filled" on:click={addItems}>Add 10 to top</button> -->
+<div class="user-entry-container">
+	<div class="input-container">
+		<textarea
+			class="textarea"
+			rows="4"
+			placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+		/>
+
+		<button
+			class="btn variant-filled"
+			on:click={async () => {
+				addItems(false, 1);
+				await tick();
+				list.scrollToBottom();
+			}}
+			>Add 1 and scroll to bottom
+		</button>
+		<button class="btn variant-filled" on:click={() => (items[15].height = randomInteger(10, 150))}
+			>Random height for 15 item</button
+		>
+	</div>
+</div>
+
+<style>
+	/* .room-content {
+		position: relative;
+		display: -webkit-box;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-box-orient: vertical;
+		-webkit-box-direction: normal;
+		-ms-flex-direction: column;
+		flex-direction: column;
+		min-width: 0;
+		min-height: 0;
+		-webkit-box-flex: 1;
+		-ms-flex: 1 1 auto;
+		flex: 1 1 auto;
+	} */
+	.vs {
+		height: calc(100vh - 105px);
+		/* height: 300px; */
+	}
+	.user-entry-container {
+		border: 1px solid white;
+		resize: vertical;
+	}
+	.input-container {
+		display: flex;
+		flex-direction: row;
+	}
+</style>

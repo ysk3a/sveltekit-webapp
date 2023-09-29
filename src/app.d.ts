@@ -7,3 +7,8 @@ declare namespace App {
 	// interface Error {}
 	// interface Platform {}
 }
+
+type AccordionState = {
+	uniqueKey: number;
+	open: boolean;
+}

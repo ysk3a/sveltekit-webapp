@@ -30,7 +30,7 @@
 			list.scrollToBottom();
 		}
 	});
-	let openedItems: { uniqueKey: number; open: boolean }[] = []; // max 30 items opened
+	let openedItems: AccordionState[] = []; // max 30 items opened
 
 	function handleAccordionItemToggle(event: CustomEvent) {
 		console.log('::feed', event);

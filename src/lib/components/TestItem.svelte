@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	export let uniqueKey;
 	export let height;
 </script>
@@ -12,7 +12,7 @@
 		/* Don't set margin top and bottom together! It will break size counting */
 		padding: 8px;
 		color: black;
-		background-color: #f6f6f6;
+		background-color: #9779b4;
 		border-radius: 20px;
 	}
 </style>
