@@ -67,7 +67,36 @@
 							<span class="flex-auto">Chat</span>
 						</a>
 					</li>
-					<!-- ... -->
+					<li>
+						<a href="/aggrid">
+							<span class="badge bg-primary-500">💀</span>
+							<span class="flex-auto">Aggrid</span>
+						</a>
+					</li>
+					<li>
+						<a href="/editor">
+							<span class="badge bg-primary-500">💀</span>
+							<span class="flex-auto">editor</span>
+						</a>
+					</li>
+					<li>
+						<a href="/svelvet">
+							<span class="badge bg-primary-500">💀</span>
+							<span class="flex-auto">svelvet</span>
+						</a>
+					</li>
+					<li>
+						<a href="/ejsinf">
+							<span class="badge bg-primary-500">💀</span>
+							<span class="flex-auto">ejsinf</span>
+						</a>
+					</li>
+					<li>
+						<a href="/charts">
+							<span class="badge bg-primary-500">💀</span>
+							<span class="flex-auto">charts</span>
+						</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
