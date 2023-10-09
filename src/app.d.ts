@@ -12,3 +12,7 @@ type AccordionState = {
 	uniqueKey: number;
 	open: boolean;
 }
+type MessageType = {
+	uniqueKey: number | void;
+	message: string;
+}

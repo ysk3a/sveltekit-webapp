@@ -20,6 +20,7 @@
 	}
 	import { onMount } from 'svelte';
 	import AccordionTest from '$lib/components/AccordionTest.svelte';
+	import { accordionStateArr } from '$lib/acoordionStore';
 
 	onMount(() => {
 		// console.log(':: feed/+page.svelte list=', list);
@@ -31,6 +32,7 @@
 		}
 	});
 	let openedItems: AccordionState[] = []; // max 30 items opened
+	$: console.log($accordionStateArr);
 
 	function handleAccordionItemToggle(event: CustomEvent) {
 		console.log('::feed', event);
