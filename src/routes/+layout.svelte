@@ -20,10 +20,11 @@
 		flavors[flavor] = !flavors[flavor];
 	}
 	$: classesActive = (href: string) => (href === $page.url.pathname ? '!bg-primary-500' : '');
+	$: currentRoute = $page.url.pathname;
 </script>
 
 <!-- App Shell -->
-<AppShell regionPage="overflow-hidden">
+<AppShell regionPage={currentRoute === '/aggrid' ? '' : 'overflow-hidden'}>
 	<svelte:fragment slot="header">
 		<AppBar>
 			<svelte:fragment slot="lead">
