@@ -74,6 +74,12 @@
 						</a>
 					</li>
 					<li>
+						<a href="/monaco">
+							<span class="badge bg-primary-500">💀</span>
+							<span class="flex-auto">monaco</span>
+						</a>
+					</li>
+					<li>
 						<a href="/editor">
 							<span class="badge bg-primary-500">💀</span>
 							<span class="flex-auto">editor</span>
