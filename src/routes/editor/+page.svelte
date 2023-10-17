@@ -5,6 +5,8 @@
 <CodeEditor /> -->
 <script lang="ts">
 	import Monaco from '$lib/components/Monaco.svelte';
+	import Monaco2 from '$lib/components/Monaco2.svelte';
+
 	let cEditor: Monaco;
 	const handleSubmit = (ev: any) => {
 		console.log(ev);
@@ -36,3 +38,7 @@
 		>Run Query</button
 	>
 </form>
+
+<br>
+
+<Monaco2 />
