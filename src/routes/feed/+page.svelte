@@ -2,7 +2,6 @@
 	import { afterUpdate, tick } from 'svelte';
 	import VirtualScroll from 'svelte-virtual-scroll-list';
 	import { createSequenceGenerator, randomInteger } from '$lib/mock';
-	import TestItem from '$lib/components/TestItem.svelte';
 
 	const getItemId = createSequenceGenerator();
 

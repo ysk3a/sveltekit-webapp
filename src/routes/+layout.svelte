@@ -10,11 +10,10 @@
 
 	let flavors: Record<string, boolean> = {
 		'virutal scroll': true,
-		aggrid: false,
-		split: true,
+		aggrid: true,
+		split: false,
 		editor: false,
-		svelvet: false,
-		'ejs inf': false
+		chart: false
 	};
 	function filter(flavor: string): void {
 		flavors[flavor] = !flavors[flavor];
@@ -81,15 +80,9 @@
 						</a>
 					</li>
 					<li>
-						<a href="/svelvet">
+						<a href="/split">
 							<span class="badge bg-primary-500">💀</span>
-							<span class="flex-auto">svelvet</span>
-						</a>
-					</li>
-					<li>
-						<a href="/ejsinf">
-							<span class="badge bg-primary-500">💀</span>
-							<span class="flex-auto">ejsinf</span>
+							<span class="flex-auto">Split</span>
 						</a>
 					</li>
 					<li>
@@ -99,6 +92,13 @@
 						</a>
 					</li>
 				</ul>
+				<div>
+					<ul style="width: 100px;">
+						<li>svelvet/svelteflow incomplete.</li>
+						<li>cannot add flowchart/orgchart maker</li>
+						<li></li>
+					</ul>
+				</div>
 			</nav>
 		</div>
 	</svelte:fragment>
