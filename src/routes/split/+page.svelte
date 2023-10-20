@@ -18,8 +18,7 @@
 
 <div id="splitter-wrapper">
 	<Splitpanes
-		theme="banana-theme"
-		class="splitter"
+		class="banana-splitter"
 		style="height: 400px"
 		on:ready={handleMessage}
 		on:resize={handleMessage}
@@ -62,7 +61,7 @@
 	textarea {
 		background-color: black;
 	}
-	/* #splitter-wrapper > :global(.splitter.banana-theme .splitpanes__pane) {
+	#splitter-wrapper > :global(.banana-splitter .splitpanes__pane) {
 		background-color: #463636;
-	} */
+	}
 </style>

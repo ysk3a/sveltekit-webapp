@@ -1,185 +1,292 @@
 <script lang="ts">
-    // another approach? github.com/sonyarianto/sveltekit-monaco-editor/blob/main/src/routes/%2Bpage.svelte
-    import { onDestroy, onMount } from 'svelte';
-    import type * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
+	// another approach? github.com/sonyarianto/sveltekit-monaco-editor/blob/main/src/routes/%2Bpage.svelte
+	import { onDestroy, onMount } from 'svelte';
+	import type * as Monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
-    let editor: Monaco.editor.IStandaloneCodeEditor;
-    let monaco: typeof Monaco;
-    let editorContainer: HTMLElement;
+	let editor: Monaco.editor.IStandaloneCodeEditor;
+	let monaco: typeof Monaco;
+	let editorContainer: HTMLElement;
 
-    onMount(async () => {
+	// regex for custom camelcase: /^[a-z]+((?:[A-Z][a-z]+)*)*[0-9]*$/gm
+	// e.g. something1, somethingProp, something1234342312, somethingSomethingSomething123
+	// regex for camelcase method: /^[a-z]+((?:[A-Z][a-z]+)*)*[0-9]*\(\)$/gm
+	// e.g. something1()
+	// regex for context: (^[a-z]+((?:[A-Z][a-z]+)*)*[0-9]*)\.([a-z]+((?:[A-Z][a-z]+)*)*[0-9]*\(\))
+	// e.g. someProp1.something() but not someProp1.somethingPorp123POP()
 
-        // Import our 'monaco.ts' file here
-        // (onMount() will only be executed in the browser, which is what we want)
-        monaco = (await import('./monaco')).default;
-// Register a new language
-monaco.languages.register({ id: "mySpecialLanguage" });
+	/*
+HOWTO?:
+monaco custom langauge where keywords is 
+conditional statements i.e. if, else, else if
+brackets color.
+property/attribute color e.g. someProp
+dot notation w/ method color e.g. whatever.someMethod()
+support comments
 
-// Register a tokens provider for the language
-monaco.languages.setMonarchTokensProvider("mySpecialLanguage", {
-    
-  // Set defaultToken to invalid to see what you do not tokenize yet
-  // defaultToken: 'invalid',
+properties/attributes and methods are retrieved from backend 
+first depending the route/tab-item selected and are used for suggestions.
+*/
+	const keywords = [
+		'abstract',
+		'continue',
+		'for',
+		'new',
+		'switch',
+		'assert',
+		'goto',
+		'do',
+		'if',
+		'private',
+		'this',
+		'break',
+		'protected',
+		'throw',
+		'else',
+		'public',
+		'enum',
+		'return',
+		'catch',
+		'try',
+		'interface',
+		'static',
+		'class',
+		'finally',
+		'const',
+		'super',
+		'while',
+		'true',
+		'false'
+	];
+	onMount(async () => {
+		// Import our 'monaco.ts' file here
+		// (onMount() will only be executed in the browser, which is what we want)
+		monaco = (await import('./monaco')).default;
+		// Register a new language
+		monaco.languages.register({ id: 'mySpecialLanguage' });
 
-  keywords: [
-    'abstract', 'continue', 'for', 'new', 'switch', 'assert', 'goto', 'do',
-    'if', 'private', 'this', 'break', 'protected', 'throw', 'else', 'public',
-    'enum', 'return', 'catch', 'try', 'interface', 'static', 'class',
-    'finally', 'const', 'super', 'while', 'true', 'false'
-  ],
+		// Register a tokens provider for the language
+		monaco.languages.setMonarchTokensProvider('mySpecialLanguage', {
+			// Set defaultToken to invalid to see what you do not tokenize yet
+			// defaultToken: 'invalid',
 
-  typeKeywords: [
-    'boolean', 'double', 'byte', 'int', 'short', 'char', 'void', 'long', 'float'
-  ],
+			keywords: [
+				'abstract',
+				'continue',
+				'for',
+				'new',
+				'switch',
+				'assert',
+				'goto',
+				'do',
+				'if',
+				'private',
+				'this',
+				'break',
+				'protected',
+				'throw',
+				'else',
+				'public',
+				'enum',
+				'return',
+				'catch',
+				'try',
+				'interface',
+				'static',
+				'class',
+				'finally',
+				'const',
+				'super',
+				'while',
+				'true',
+				'false'
+			],
 
-  operators: [
-    '=', '>', '<', '!', '~', '?', ':', '==', '<=', '>=', '!=',
-    '&&', '||', '++', '--', '+', '-', '*', '/', '&', '|', '^', '%',
-    '<<', '>>', '>>>', '+=', '-=', '*=', '/=', '&=', '|=', '^=',
-    '%=', '<<=', '>>=', '>>>='
-  ],
+			typeKeywords: ['boolean', 'double', 'byte', 'int', 'short', 'char', 'void', 'long', 'float'],
 
-  // we include these common regular expressions
-  symbols:  /[=><!~?:&|+\-*\/\^%]+/,
+			operators: [
+				'=',
+				'>',
+				'<',
+				'!',
+				'~',
+				'?',
+				':',
+				'==',
+				'<=',
+				'>=',
+				'!=',
+				'&&',
+				'||',
+				'++',
+				'--',
+				'+',
+				'-',
+				'*',
+				'/',
+				'&',
+				'|',
+				'^',
+				'%',
+				'<<',
+				'>>',
+				'>>>',
+				'+=',
+				'-=',
+				'*=',
+				'/=',
+				'&=',
+				'|=',
+				'^=',
+				'%=',
+				'<<=',
+				'>>=',
+				'>>>='
+			],
 
-  // C# style strings
-  escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
+			// we include these common regular expressions
+			symbols: /[=><!~?:&|+\-*\/\^%]+/,
 
-  // The main tokenizer for our languages
-  tokenizer: {
-    root: [
-      // identifiers and keywords
-      [/[a-z_$][\w$]*/, { cases: { '@typeKeywords': 'keyword',
-                                   '@keywords': 'keyword',
-                                   '@default': 'identifier' } }],
-      [/[A-Z][\w\$]*/, 'type.identifier' ],  // to show class names nicely
+			// C# style strings
+			escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
 
-      // whitespace
-      { include: '@whitespace' },
+			// The main tokenizer for our languages
+			tokenizer: {
+				root: [
+					// identifiers and keywords
+					[
+						/[a-z_$][\w$]*/,
+						{
+							cases: {
+								'@typeKeywords': 'keyword',
+								'@keywords': 'keyword',
+								'@default': 'identifier'
+							}
+						}
+					],
+					[/[A-Z][\w\$]*/, 'type.identifier'], // to show class names nicely
 
-      // delimiters and operators
-      [/[{}()\[\]]/, '@brackets'],
-      [/[<>](?!@symbols)/, '@brackets'],
-      [/@symbols/, { cases: { '@operators': 'operator',
-                              '@default'  : '' } } ],
+					// whitespace
+					{ include: '@whitespace' },
 
-      // @ annotations.
-      // As an example, we emit a debugging log message on these tokens.
-      // Note: message are supressed during the first load -- change some lines to see them.
-      [/@\s*[a-zA-Z_\$][\w\$]*/, { token: 'annotation', log: 'annotation token: $0' }],
+					// delimiters and operators
+					[/[{}()\[\]]/, '@brackets'],
+					[/[<>](?!@symbols)/, '@brackets'],
+					[/@symbols/, { cases: { '@operators': 'operator', '@default': '' } }],
 
-      // numbers
-      [/\d*\.\d+([eE][\-+]?\d+)?/, 'number.float'],
-      [/0[xX][0-9a-fA-F]+/, 'number.hex'],
-      [/\d+/, 'number'],
+					// @ annotations.
+					// As an example, we emit a debugging log message on these tokens.
+					// Note: message are supressed during the first load -- change some lines to see them.
+					[/@\s*[a-zA-Z_\$][\w\$]*/, { token: 'annotation', log: 'annotation token: $0' }],
 
-      // delimiter: after number because of .\d floats
-      [/[;,.]/, 'delimiter'],
+					// numbers
+					[/\d*\.\d+([eE][\-+]?\d+)?/, 'number.float'],
+					[/0[xX][0-9a-fA-F]+/, 'number.hex'],
+					[/\d+/, 'number'],
 
-      // strings
-      [/"([^"\\]|\\.)*$/, 'string.invalid' ],  // non-teminated string
-      [/"/,  { token: 'string.quote', bracket: '@open', next: '@string' } ],
+					// delimiter: after number because of .\d floats
+					[/[;,.]/, 'delimiter'],
 
-      // characters
-      [/'[^\\']'/, 'string'],
-      [/(')(@escapes)(')/, ['string','string.escape','string']],
-      [/'/, 'string.invalid']
-    ],
+					// strings
+					[/"([^"\\]|\\.)*$/, 'string.invalid'], // non-teminated string
+					[/"/, { token: 'string.quote', bracket: '@open', next: '@string' }],
 
-    comment: [
-      [/[^\/*]+/, 'comment' ],
-      [/\/\*/,    'comment', '@push' ],    // nested comment
-      ["\\*/",    'comment', '@pop'  ],
-      [/[\/*]/,   'comment' ]
-    ],
+					// characters
+					[/'[^\\']'/, 'string'],
+					[/(')(@escapes)(')/, ['string', 'string.escape', 'string']],
+					[/'/, 'string.invalid']
+				],
 
-    string: [
-      [/[^\\"]+/,  'string'],
-      [/@escapes/, 'string.escape'],
-      [/\\./,      'string.escape.invalid'],
-      [/"/,        { token: 'string.quote', bracket: '@close', next: '@pop' } ]
-    ],
+				comment: [
+					[/[^\/*]+/, 'comment'],
+					[/\/\*/, 'comment', '@push'], // nested comment
+					['\\*/', 'comment', '@pop'],
+					[/[\/*]/, 'comment']
+				],
 
-    whitespace: [
-      [/[ \t\r\n]+/, 'white'],
-      [/\/\*/,       'comment', '@comment' ],
-      [/\/\/.*$/,    'comment'],
-    ],
-  },
+				string: [
+					[/[^\\"]+/, 'string'],
+					[/@escapes/, 'string.escape'],
+					[/\\./, 'string.escape.invalid'],
+					[/"/, { token: 'string.quote', bracket: '@close', next: '@pop' }]
+				],
 
-});
-// Define a new theme that contains only rules that match this language
-monaco.editor.defineTheme("myCoolTheme", {
-	base: "vs",
-	inherit: false,
-	rules: [
-		{ token: "custom-info", foreground: "808080" },
-		{ token: "custom-error", foreground: "ff0000", fontStyle: "bold" },
-		{ token: "custom-notice", foreground: "FFA500" },
-		{ token: "custom-date", foreground: "008800" },
-	],
-	colors: {
-		"editor.foreground": "#000000",
-	},
-});
-// Register a completion item provider for the new language
-monaco.languages.registerCompletionItemProvider("mySpecialLanguage", {
-	provideCompletionItems: (model, position) => {
-		var word = model.getWordUntilPosition(position);
-		var range = {
-			startLineNumber: position.lineNumber,
-			endLineNumber: position.lineNumber,
-			startColumn: word.startColumn,
-			endColumn: word.endColumn,
-		};
-		var suggestions = [
-            {
-                label: "writeln",
-				kind: monaco.languages.CompletionItemKind.Keyword,
-				insertText: "Console.writeln(${1:})",
-				insertTextRules:
-					monaco.languages.CompletionItemInsertTextRule
-						.InsertAsSnippet,
-				range: range,
-            },
-			{
-				label: "simpleText",
-				kind: monaco.languages.CompletionItemKind.Text,
-				insertText: "simpleText",
-				range: range,
-			},
-			{
-				label: "testing",
-				kind: monaco.languages.CompletionItemKind.Keyword,
-				insertText: "testing(${1:condition})",
-				insertTextRules:
-					monaco.languages.CompletionItemInsertTextRule
-						.InsertAsSnippet,
-				range: range,
-			},
-			{
-				label: "ifelse",
-				kind: monaco.languages.CompletionItemKind.Snippet,
-				insertText: [
-					"if (${1:condition}) {",
-					"\t$0",
-					"} else {",
-					"\t",
-					"}",
-				].join("\n"),
-				insertTextRules:
-					monaco.languages.CompletionItemInsertTextRule
-						.InsertAsSnippet,
-				documentation: "If-Else Statement",
-				range: range,
-			},
-		];
-		return { suggestions: suggestions };
-	},
-});
-        // Your monaco instance is ready, let's display some code!
-        editor = monaco.editor.create(editorContainer, {
-            value: `
+				whitespace: [
+					[/[ \t\r\n]+/, 'white'],
+					[/\/\*/, 'comment', '@comment'],
+					[/\/\/.*$/, 'comment']
+				]
+			}
+		});
+		// Define a new theme that contains only rules that match this language
+		monaco.editor.defineTheme('myCoolTheme', {
+			base: 'vs',
+			inherit: false,
+			rules: [
+				{ token: 'custom-info', foreground: '808080' },
+				{ token: 'custom-error', foreground: 'ff0000', fontStyle: 'bold' },
+				{ token: 'custom-notice', foreground: 'FFA500' },
+				{ token: 'custom-date', foreground: '008800' },
+				{ token: 'custom-date', foreground: '008800' },
+				{ token: 'custom-date', foreground: '008800' }
+			],
+			colors: {
+				'editor.foreground': '#000000'
+			}
+		});
+		// Register a completion item provider for the new language
+		monaco.languages.registerCompletionItemProvider('mySpecialLanguage', {
+			provideCompletionItems: (model, position) => {
+				var word = model.getWordUntilPosition(position);
+				var range = {
+					startLineNumber: position.lineNumber,
+					endLineNumber: position.lineNumber,
+					startColumn: word.startColumn,
+					endColumn: word.endColumn
+				};
+				var suggestions = [
+					{
+						label: 'writeln',
+						kind: monaco.languages.CompletionItemKind.Keyword,
+						insertText: 'Console.writeln(${1:})',
+						insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+						range: range
+					},
+					{
+						label: 'simpleText',
+						kind: monaco.languages.CompletionItemKind.Text,
+						insertText: 'simpleText',
+						range: range
+					},
+					{
+						label: 'testing',
+						kind: monaco.languages.CompletionItemKind.Keyword,
+						insertText: 'testing(${1:condition})',
+						insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+						range: range
+					},
+					{
+						label: 'ifelse',
+						kind: monaco.languages.CompletionItemKind.Snippet,
+						insertText: ['if (${1:condition}) {', '\t$0', '} else {', '\t', '}'].join('\n'),
+						insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+						documentation: 'If-Else Statement',
+						range: range
+					}
+					// ...keywords.map((k) => {
+					// 	return {
+					// 		label: k,
+					// 		kind: monaco.languages.CompletionItemKind.Keyword,
+					// 		insertText: k,
+					// 		range: range
+					// 	};
+					// })
+				];
+				return { suggestions: suggestions };
+			}
+		});
+		// Your monaco instance is ready, let's display some code!
+		editor = monaco.editor.create(editorContainer, {
+			value: `
             // Type source code in your language here...
 class MyClass {
   @attribute
@@ -191,32 +298,32 @@ class MyClass {
             function hello() {
 	alert('Hello world!');
 }
-console.log('Hello from Monaco! (the editor, not the city...)')`,
-            language: "mySpecialLanguage",
-            theme:"vs-dark",
-        });
-        editor
-        // const editor = monaco.editor.create(editorContainer);
-        // const model = monaco.editor.createModel(
-        //     "console.log('Hello from Monaco! (the editor, not the city...)')",
-        //     'javascript',
-        // );
-        // editor.setModel(model);
-    });
+Console.log('Hello from Monaco! (the editor, not the city...)')`,
+			language: 'mySpecialLanguage',
+			theme: 'vs-dark'
+		});
+		editor;
+		// const editor = monaco.editor.create(editorContainer);
+		// const model = monaco.editor.createModel(
+		//     "console.log('Hello from Monaco! (the editor, not the city...)')",
+		//     'javascript',
+		// );
+		// editor.setModel(model);
+	});
 
-    onDestroy(() => {
-        monaco?.editor.getModels().forEach((model) => model.dispose());
-        editor?.dispose();
-    });
+	onDestroy(() => {
+		monaco?.editor.getModels().forEach((model) => model.dispose());
+		editor?.dispose();
+	});
 </script>
 
 <div>
-    <div class="container" bind:this={editorContainer} />
+	<div class="container" bind:this={editorContainer} />
 </div>
 
 <style>
-    .container {
-        width: 100%;
-        height: 600px;
-    }
+	.container {
+		width: 100%;
+		height: 600px;
+	}
 </style>

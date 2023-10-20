@@ -23,7 +23,9 @@
 </script>
 
 <!-- App Shell -->
-<AppShell regionPage={currentRoute === '/aggrid' ? '' : 'overflow-hidden'}>
+<!-- regionPage={currentRoute === '/aggrid' ? '' : 'overflow-hidden'} -->
+
+<AppShell scrollbarGutter="auto">
 	<svelte:fragment slot="header">
 		<AppBar>
 			<svelte:fragment slot="lead">
@@ -106,11 +108,13 @@
 					</ul>
 				</div>
 			</nav>
-		</div>
-	</svelte:fragment>
+		</div></svelte:fragment
+	>
 	<svelte:fragment slot="sidebarRight">
-		<div id="sidebar-right" class="hidden lg:block">Right Sidebar</div>
+		<div id="sidebar-right" class="hidden lg:block">Sidebar</div>
 	</svelte:fragment>
-
+	<svelte:fragment slot="pageHeader">Page Header</svelte:fragment>
 	<slot />
+	<svelte:fragment slot="pageFooter">Page Footer</svelte:fragment>
+	<svelte:fragment slot="footer">Footer</svelte:fragment>
 </AppShell>
