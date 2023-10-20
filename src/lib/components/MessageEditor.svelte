@@ -8,6 +8,7 @@
 	import rehypeHighlight from 'rehype-highlight';
 	import remarkMentions from 'remark-mentions';
 	import rehypeSlug from 'rehype-slug';
+	import MessageExRender from './MessageExRender.svelte';
 
 	// import remarkGfm from 'remark-gfm';
 	// import type { Plugin } from '../types';
@@ -18,13 +19,16 @@
 
 ## Same size with above
 
-#hashtagchip
+this is #hashtagchip in sentence.
 
-@mentionchip
+regular p
+
+this is a mention in @mentionchip as shown.
 
 `;
 	// (processor) => processor.use(remarkMentions)
 	const plugins: Plugin[] = [
+		{ renderer: { p: MessageExRender } },
 		gfmPlugin(),
 		{
 			remarkPlugin: [
@@ -47,6 +51,7 @@
 	];
 </script>
 
+<!-- <MessageExRender -->
 <textarea class="textarea" rows="4" bind:value={md} />
 <Markdown {md} {plugins} />
 

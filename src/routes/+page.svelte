@@ -1,5 +1,6 @@
 <script lang="ts">
 	import MessageEditor from '$lib/components/MessageEditor.svelte';
+	import MessageRender from '$lib/components/MessageRender.svelte';
 </script>
 
 <!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
@@ -7,6 +8,8 @@
 <div class="container h-full mx-auto flex justify-center items-center">
 	<div class="render-message">
 		<MessageEditor />
+		<br />
+		<MessageRender />
 	</div>
 	<div class="space-y-10 text-center flex flex-col items-center">
 		<h2 class="h2">Welcome to Skeleton.</h2>
