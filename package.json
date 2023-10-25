@@ -46,6 +46,23 @@
   "type": "module",
   "dependencies": {
     "@floating-ui/dom": "1.5.3",
+    "@skyra/discord-components-core": "^3.6.1",
+    "@tiptap/core": "^2.1.12",
+    "@tiptap/extension-bold": "^2.1.12",
+    "@tiptap/extension-code": "^2.1.12",
+    "@tiptap/extension-code-block": "^2.1.12",
+    "@tiptap/extension-document": "^2.1.12",
+    "@tiptap/extension-highlight": "^2.1.12",
+    "@tiptap/extension-italic": "^2.1.12",
+    "@tiptap/extension-link": "^2.1.12",
+    "@tiptap/extension-mention": "^2.1.12",
+    "@tiptap/extension-paragraph": "^2.1.12",
+    "@tiptap/extension-strike": "^2.1.12",
+    "@tiptap/extension-text": "^2.1.12",
+    "@tiptap/extension-underline": "^2.1.12",
+    "@tiptap/pm": "^2.1.12",
+    "@tiptap/starter-kit": "^2.1.12",
+    "@tiptap/suggestion": "^2.1.12",
     "highlight.js": "^11.9.0",
     "lorem-ipsum": "^2.0.8",
     "marked": "^9.1.2",
@@ -54,6 +71,8 @@
     "remark-gfm": "^4.0.0",
     "remark-mentions": "^1.1.0",
     "svelte-exmarkdown": "^3.0.1",
-    "svelte-markdown": "^0.4.0"
+    "svelte-markdown": "^0.4.0",
+    "svelte-tiptap": "^1.1.2",
+    "tippy.js": "^6.3.7"
   }
 }

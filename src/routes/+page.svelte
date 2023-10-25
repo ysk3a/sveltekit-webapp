@@ -1,14 +1,20 @@
 <script lang="ts">
 	import MessageEditor from '$lib/components/MessageEditor.svelte';
 	import MessageRender from '$lib/components/MessageRender.svelte';
+	import TiptapEditor from '$lib/components/TiptapEditor.svelte';
+	import TiptapSvelteWrapped from '$lib/components/TiptapSvelteWrapped.svelte';
 </script>
 
 <!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
 
 <div class="container h-full mx-auto flex justify-center items-center">
 	<div class="render-message">
-		<MessageEditor />
+		<TiptapSvelteWrapped />
 		<br />
+		<!-- <TiptapEditor /> -->
+		<br />
+		<!-- <MessageEditor />
+		<br /> -->
 		<MessageRender />
 	</div>
 	<div class="space-y-10 text-center flex flex-col items-center">

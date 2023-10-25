@@ -2,14 +2,53 @@
 	import SvelteMarkdown from 'svelte-markdown';
 	import { marked } from 'marked';
 
-	const tokens = marked.lexer('this is an **example**');
+	const tokens2 = marked.lexer('this is an **example**');
+	const tokens = marked.lexer('this <a href="hello">Hello</a> is an @example 123');
 
-	marked.walkTokens(tokens, (token: any) => {
+	const res = marked.walkTokens(tokens, (token: any) => {
+		//if (token.type == 'strong') token.type = 'em';
+		// token.raw = token.raw.toUpperCase();
+		console.log('::walktokens maybepromise', token);
+		if (token.type === 'text') {
+			token.text = token.text.replace(/@(\w+)/g, function (match: any, username: any) {
+				//return `<a class="tag-item" href="/profile/${username}">@${username}</a>`;
+
+				return `<button  class="tag-item">@${username}</button>`;
+			});
+
+			return token;
+		}
+
+		return token;
+	});
+	// let item = document.querySelector('.tag-item');
+	marked.walkTokens(tokens2, (token: any) => {
 		if (token.type == 'strong') token.type = 'em';
 		// token.raw = token.raw.toUpperCase();
 		console.log('::walktokens', token);
 	});
+	let rootmd: HTMLDivElement;
+	let oneMd: Element;
+	onMount(() => {
+		// problem? since get all so can be very large?
+		const nd = rootmd.querySelectorAll('.tag-item');
+		console.log('::onmount item', nd);
+		oneMd = nd[0];
+		oneMd.addEventListener('mouseover', func, false);
+		oneMd.addEventListener('mouseout', func1, false);
+	});
+	function func() {
+		// not needed since item is already global,
+		// I am assuming this is here just because it's sample code?
+		// var item = document.getElementById("button");
+		oneMd?.setAttribute('style', 'background-color:blue;');
+	}
+
+	function func1() {
+		oneMd?.setAttribute('style', 'background-color:green;');
+	}
 	import Emphasis from './Emphasis.svelte';
+	import { onMount } from 'svelte';
 	const source = `
     # This is a header
   
@@ -38,5 +77,33 @@
 	}
 </script>
 
-<!-- <Emphasis /> -->
-<SvelteMarkdown {source} renderers={{ paragraph: Emphasis }} on:parsed={handleParsed} />
+<div class="md-container" bind:this={rootmd}>
+	<SvelteMarkdown source={marked.parser(res)} />
+</div>
+<hr />
+<SvelteMarkdown {source} renderers={{ paragraph: Emphasis }} on:parsed={handleParsed} /> -->
+<div class="md-container2">
+	<SvelteMarkdown source={marked.parser(res)} />
+</div>
+
+<!-- 
+div.messages
+    div.edit
+    div.img
+    div.name-date
+    div.content
+        if mention
+        span.mention
+        else
+        span.text
+    div.reactions
+
+ -->
+
+<style>
+	hr {
+		background: black;
+		/* border: 1px solid black; */
+		width: 100%;
+	}
+</style>
