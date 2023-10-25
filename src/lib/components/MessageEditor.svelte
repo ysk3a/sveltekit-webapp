@@ -28,7 +28,7 @@ this is a mention in @mentionchip as shown.
 `;
 	// (processor) => processor.use(remarkMentions)
 	const plugins: Plugin[] = [
-		{ renderer: { p: MessageExRender } },
+		// { renderer: { p: MessageExRender } },
 		gfmPlugin(),
 		{
 			remarkPlugin: [
@@ -51,7 +51,7 @@ this is a mention in @mentionchip as shown.
 	];
 </script>
 
-<!-- <MessageExRender -->
+<!-- <MessageExRender /> -->
 <textarea class="textarea" rows="4" bind:value={md} />
 <Markdown {md} {plugins} />
 
