@@ -133,8 +133,10 @@
 <!-- github.com/quilljs/quill/issues/2276 
 next todo is get user input, save as delta and html, sanitize (how?), store sanitzied
 readonly mode use html, for edit use delta.
-or something like
+or something liked
 github.com/quilljs/quill/issues/2276#issuecomment-1621104821
+
+- emoji, syntax highlighting
 
 alternative:
 summernote - need jquery
@@ -142,6 +144,25 @@ prosemirror
 more bookmarked
 
 ideal simple: safe text with only hashtag and mention that have listeners.
+
+
+approach-1:
+delta (getcontents) 
+-> htmlstring (quill.root.innerhtml) 
+-> markdownstring = sanitize(marked.parse(htmlstring))
+-> pass to svelte-markdown
+
+- all these converstion/parsing should be put in web worker?
+
+delta (getcontents) 
+-> htmlstring (quill.root.innerhtml) 
+-> markdownstring = sanitize(marked.parse(htmlstring))
+-> send to backend and sanitize
+-> on retrieve, get from db, sanitize then send to front
+-> on received, sanitize(marked.parse(response))
+-> pass to svelte-markdown
+
+
  -->
 
 <style>

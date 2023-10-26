@@ -9,6 +9,7 @@
 	import remarkMentions from 'remark-mentions';
 	import rehypeSlug from 'rehype-slug';
 	import MessageExRender from './MessageExRender.svelte';
+	import rehypeRaw from 'rehype-raw';
 
 	// import remarkGfm from 'remark-gfm';
 	// import type { Plugin } from '../types';
@@ -43,6 +44,7 @@ this is a mention in @mentionchip as shown.
 		},
 		{
 			rehypePlugin: [
+				rehypeRaw,
 				rehypeSlug,
 				rehypeHighlight,
 				{ ignoreMissing: true, languages: { typescript } }

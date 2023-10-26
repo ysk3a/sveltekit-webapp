@@ -28,7 +28,7 @@
 
 <style>
 	.custom-hashtagMention {
-		background-color: rgb(238, 191, 129);
+		background-color: rgb(238, 129, 129);
 		color: rgb(56, 56, 56);
 		border: 1px solid;
 		border-radius: 5px;

@@ -1,10 +1,17 @@
 <script lang="ts">
 	import SvelteMarkdown from 'svelte-markdown';
 	import { marked } from 'marked';
-
-	const tokens2 = marked.lexer('this is an **example**');
-	const tokens = marked.lexer('this <a href="hello">Hello</a> is an @example 123');
-
+	marked.use({
+		async: true,
+		pedantic: false,
+		gfm: true
+	});
+	const tokens2 = marked.lexer('this is an **example** @somemention with #hasthagtag continue.');
+	const parseToHtml = marked.parse(
+		'this is an **example** @somemention with #hasthagtag continue.'
+	);
+	const tokens = marked.lexer('this  is an @example 123');
+	console.log('::tokens2', tokens2, tokens);
 	const res = marked.walkTokens(tokens, (token: any) => {
 		//if (token.type == 'strong') token.type = 'em';
 		// token.raw = token.raw.toUpperCase();
@@ -21,12 +28,29 @@
 
 		return token;
 	});
-	// let item = document.querySelector('.tag-item');
-	marked.walkTokens(tokens2, (token: any) => {
-		if (token.type == 'strong') token.type = 'em';
+	const res2 = marked.walkTokens(tokens2, (token: any) => {
+		//if (token.type == 'strong') token.type = 'em';
 		// token.raw = token.raw.toUpperCase();
-		console.log('::walktokens', token);
+		console.log('::walktokens tokens2 maybepromise', token);
+		if (token.type === 'text') {
+			token.text = token.text.replace(/@(\w+)/g, function (match: any, username: any) {
+				//return `<a class="tag-item" href="/profile/${username}">@${username}</a>`;
+
+				return `<button  class="tag-item">@${username}</button>`;
+			});
+
+			return token;
+		}
+
+		return token;
 	});
+
+	// let item = document.querySelector('.tag-item');
+	// marked.walkTokens(tokens2, (token: any) => {
+	// 	if (token.type == 'strong') token.type = 'em';
+	// 	// token.raw = token.raw.toUpperCase();
+	// 	console.log('::walktokens', token);
+	// });
 	let rootmd: HTMLDivElement;
 	let oneMd: Element;
 	onMount(() => {
@@ -49,14 +73,19 @@
 	}
 	import Emphasis from './Emphasis.svelte';
 	import { onMount } from 'svelte';
+	import StrongInParagraph from './StrongInParagraph.svelte';
 	const source = `
     # This is a header
   
   This is a paragraph.
   
-  @bobby
+  **@bobby**
 
   i am testing @john-doe other text.
+
+  i am testing @sara-doe other text.
+
+
   i am test #potatopc other text
   #someTag
 
@@ -81,10 +110,18 @@
 	<SvelteMarkdown source={marked.parser(res)} />
 </div>
 <hr />
-<SvelteMarkdown {source} renderers={{ paragraph: Emphasis }} on:parsed={handleParsed} /> -->
+<!-- <StrongInParagraph/> -->
+<SvelteMarkdown {source} renderers={{ strong: StrongInParagraph }} on:parsed={handleParsed} />
+<hr />
+
 <div class="md-container2">
 	<SvelteMarkdown source={marked.parser(res)} />
 </div>
+<hr />
+
+<!-- <div class="md-container3">
+	<SvelteMarkdown source={marked.parser(res2)} />
+</div> -->
 
 <!-- 
 div.messages
@@ -97,6 +134,15 @@ div.messages
         else
         span.text
     div.reactions
+
+
+	//
+
+regular textarea with mention like tributejs.
+can use editor or markdown but in the end input is markdown.
+on send/save/post, render as markdown or html?
+so on render, need to replace @ and # and other markdown.
+i think only custom is the @ and # if using markdown renderer libraries?
 
  -->
 
