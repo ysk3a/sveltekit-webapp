@@ -6,7 +6,7 @@
 
 	// if text has @ or # render strong else regular p
 	$: hasHashtagMention = text.match(/[#@]\w\S*\b/g);
-	$: console.log('::hashtagMention', hasHashtagMention, text);
+	$: console.log('::emphais', hasHashtagMention, text);
 </script>
 
 {#if hasHashtagMention}

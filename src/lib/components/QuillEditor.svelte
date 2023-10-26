@@ -7,7 +7,10 @@
 	let quill = null;
 	let editor: HTMLDivElement;
 	import 'quill-mention';
+	import DOMPurify from 'dompurify';
 	// import * as DOMPurify from 'dompurify';
+	// import { DOMPurify } from 'dompurify';
+
 	// const clean = DOMPurify.sanitize('<b>hello there</b>');
 	import { sanitize, isSupported } from 'isomorphic-dompurify';
 	//import DOMPurify from 'isomorphic-dompurify';
@@ -54,8 +57,11 @@
 <span data-value="Fredrik Sundqvist" data-id="1" data-denotation-char="@" data-index="0" class="mention"><span>@Fredrik Sundqvist</span></span>
 `;
 	let justHtml = '';
-	let source = ''; //td.turndown(justHtml);
-
+	$: source = ''; //td.turndown(justHtml);
+	$: console.log('::source', source);
+	$: src2 = '';
+	$: console.log('::src2', src2);
+	let resolvedParsedHtml = '';
 	let maxOne: number = 0; // might use as global store or something instead to not render more than once.
 	onMount(async () => {
 		const { default: Quill } = await import('quill');
@@ -83,17 +89,25 @@
 			placeholder: 'Write your story...'
 		});
 
-		quill.on('text-change', function () {
+		quill.on('text-change', async function () {
 			maxOne++;
 			var delta = quill.getContents();
 			var text = quill.getText();
 			// const clean = DOMPurify.sanitize(dirty);
 			// can't tell if sanitize is sanitizing.
 			justHtmlString = sanitize(quill.root.innerHTML);
-			// source = sanitize(quill.root.innerHTML);
-			source = sanitize(marked.parse(quill.root.innerHTML));
-			console.log('::ontextchange', delta, justHtmlString, maxOne);
+			source = sanitize(quill.root.innerHTML);
+			// vs ?
+			// justHtmlString = sanitize(quill.root.innerHTML);
+			// resolvedParsedHtml = await marked.parse(quill.root.innerHTML);
+			// src2 = DOMPurify.sanitize(resolvedParsedHtml);
+			// source = src2;
+
+			console.log('::ontextchange', delta, justHtmlString, src2);
 		});
+		// src2 = await sanitize(marked.parse(quill.root.innerHTML));
+		// console.log('::ontextchange outisde', src2);
+
 		if (maxOne === 1) {
 			justHtmlString =
 				'<p><span data-value="Fredrik Sundqvist" data-id="1" data-denotation-char="@" data-index="0" class="mention"><span>@Fredrik Sundqvist</span></span> <span data-value="Patrik Sjölin" data-id="2" data-denotation-char="@" data-index="1" class="mention"><span>@Patrik Sjölin</span></span> </p>';
