@@ -176,6 +176,22 @@ delta (getcontents)
 -> on received, sanitize(marked.parse(response))
 -> pass to svelte-markdown
 
+new msg:
+
+quill
+-> delta -> sanitize if possible -> save delta
+-> innerhtml -> hast from html -> hast sanitize -> save hast / mdast (mdast no style)
+
+render:
+
+get hast or delta
+-> hast to html or hast to mdast
+-> sanitize
+-> mdast to markdown
+-> sanitize
+-> markdown to svelte-markdown
+
+edit: wip
 
  -->
 
