@@ -11,7 +11,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { fromEvent, throttle as rxThrottle, interval } from 'rxjs';
 	import throttle from 'just-throttle';
-
+	// import SmartBreaker from 'quill-smart-break';
 	const dispatch = createEventDispatcher();
 
 	let quill: Quill;
@@ -24,7 +24,7 @@
 
 	// import Turndown from 'turndown';
 	// const td = new Turndown();
-
+	// Quill.register('modules/smart-breaker', SmartBreaker);
 	Quill.register('modules/clipboard', PlainClipboard, true);
 
 	// var quill = new Quill('#editor-container', {
@@ -87,7 +87,8 @@
 					// [{ header: [1, 2, 3, false] }],
 					['bold', 'italic', 'underline', 'strike'],
 					['link', 'code-block']
-				]
+				],
+				'smart-breaker': true
 			},
 			theme: 'snow',
 			placeholder: 'Write your story...'
