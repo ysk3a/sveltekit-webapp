@@ -1,38 +1,63 @@
-# create-svelte
+# sveltekit project or prototype repo that uses various libraries
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+### Sep 22 2023 - Oct 27 2023:
+- try to use:
+    - monaco
+    - svelte-virtual-scroll-list
+    - svelte splitter
+    - svelte markdown / svelte exmarkdown
+    - quill
+    - tiptap
+    - skeleton.dev or carbon 
+- main info:
+    - commit of quill + virtual list + svelte-markdown(marked)
+    - use domsanitize to sanitize html and pass html directly to svelte-markdown
+    - quill auto grow to max height until scrollbar like discord input
+    - remove the h-full the skeletondev automatically added with h-screen
+    - add other 100vh for the `otter` route to have proper scrollbar
 
-## Creating a project
+  
+***
+### todo:
+Editor:
 
-If you're seeing this, you've probably already done this step. Congrats!
+- for now used quill so next try to add editing
+- send message using enter instead of button
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Gridster like feature:
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+- dnd grid lib or Golden Layout
 
-## Developing
+Code Editor (purple tab group)
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- code editor w/ custom language
+- or just code highlighter while typing like codejar
 
-```bash
-npm run dev
+Graph:
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+- node/graph lib e.g. cytoscape, sigma, ploty for org chart
 
-## Building
 
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+***
+### things to consider:
+- quill: v1.3.7 uses outdated dom mutation insteat. potential fix in v2.0.0 if that ever get released...
+- different approach to quill and svelte-markdown
+    - svelte-exmarkdown with mdast and hast
+    ```txt
+    quill :
+    (-> delta -> sanitize if possible -> save delta)
+    (-> innerhtml -> hast from html -> hast sanitize -> save hast / mdast (mdast no style))
+    render:
+    (get hast or delta -> hast to html or hast to mdast -> sanitize -> mdast to markdown -> sanitize -> markdown to svelte-markdown)
+    ```
+    - markedjs tokenzier for @mention/#hashtags with or without regular textarea
+	- regular textarea with tributejs which later converts to markdown on save/preview like github
+	- other full wysiwyg:
+		- basecamp trix w/ @mention/#hashtags
+		- summernotes (if ok w/ jquery) 
+		- jodit
+		- if use vue maybe tiptap
+		- svelte-slatejs if mention is possible in it.
+		- tui editor
+		- milkdown
+		- SCEditor

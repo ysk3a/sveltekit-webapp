@@ -21,3 +21,7 @@ type MessageType = {
 	uniqueKey: number | void;
 	message: string;
 }
+type MessageMDType = {
+	uniqueKey: string;
+	source: string;
+}

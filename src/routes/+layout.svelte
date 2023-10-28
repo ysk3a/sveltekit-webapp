@@ -25,15 +25,14 @@
 <!-- App Shell -->
 <!-- regionPage={currentRoute === '/aggrid' ? '' : 'overflow-hidden'} -->
 
-<AppShell scrollbarGutter="auto">
-	<svelte:fragment slot="header">
+<AppShell slotPageContent="h-screen">
+	<!-- <svelte:fragment slot="header">
 		<AppBar>
 			<svelte:fragment slot="lead">
 				<strong class="text-xl uppercase">Skeleton</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				{#each Object.keys(flavors) as f}
-					<!-- svelte-ignore a11y-no-static-element-interactions -->
 					<span
 						class="chip {flavors[f] ? 'variant-filled' : 'variant-soft'}"
 						on:click={() => {
@@ -46,7 +45,7 @@
 				{/each}
 			</svelte:fragment>
 		</AppBar>
-	</svelte:fragment>
+	</svelte:fragment> -->
 	<svelte:fragment slot="sidebarLeft">
 		<div id="sidebar-left" class="hidden lg:block">
 			<nav class="list-nav">
@@ -55,6 +54,12 @@
 						<a href="/">
 							<span class="badge bg-primary-500">💀</span>
 							<span class="flex-auto">Home</span>
+						</a>
+					</li>
+					<li>
+						<a href="/otter">
+							<span class="badge bg-primary-500">💀</span>
+							<span class="flex-auto">otter</span>
 						</a>
 					</li>
 					<li>
@@ -113,8 +118,19 @@
 	<svelte:fragment slot="sidebarRight">
 		<div id="sidebar-right" class="hidden lg:block">Sidebar</div>
 	</svelte:fragment>
-	<svelte:fragment slot="pageHeader">Page Header</svelte:fragment>
+	<!-- <svelte:fragment slot="pageHeader">Page Header</svelte:fragment> -->
 	<slot />
-	<svelte:fragment slot="pageFooter">Page Footer</svelte:fragment>
-	<svelte:fragment slot="footer">Footer</svelte:fragment>
+	<!-- <svelte:fragment slot="pageFooter">Page Footer</svelte:fragment> -->
+	<!-- <svelte:fragment slot="footer">Footer</svelte:fragment> -->
 </AppShell>
+
+<!-- <div class="main-layout">
+
+</div>
+
+<style>
+	.main-layout {
+		height: 100vh;
+		width: 100vw;
+	}
+</style> -->

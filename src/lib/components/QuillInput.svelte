@@ -3,13 +3,18 @@
 	import Quill from 'quill';
 	import 'quill/dist/quill.snow.css';
 	import 'quill-mention';
-	import DOMPurify from 'dompurify';
+	// import DOMPurify from 'dompurify';
 	import { sanitize, isSupported } from 'isomorphic-dompurify';
 	import SvelteMarkdown from 'svelte-markdown';
 	import { marked } from 'marked';
 	import PlainClipboard from './PlainClipboard';
+	import { createEventDispatcher } from 'svelte';
+	import { fromEvent, throttle as rxThrottle, interval } from 'rxjs';
+	import throttle from 'just-throttle';
 
-	let quill = null;
+	const dispatch = createEventDispatcher();
+
+	let quill: Quill;
 	let editor: HTMLDivElement;
 	// import * as DOMPurify from 'dompurify';
 	// import { DOMPurify } from 'dompurify';
@@ -65,7 +70,7 @@
 	onMount(async () => {
 		const { default: Quill } = await import('quill');
 		maxOne++;
-		let quill = new Quill(editor, {
+		quill = new Quill(editor, {
 			modules: {
 				mention: {
 					allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
@@ -79,7 +84,7 @@
 					}
 				},
 				toolbar: [
-					[{ header: [1, 2, 3, false] }],
+					// [{ header: [1, 2, 3, false] }],
 					['bold', 'italic', 'underline', 'strike'],
 					['link', 'code-block']
 				]
@@ -116,88 +121,132 @@
 			console.log(':: endMount justHmlt', source, maxOne);
 		}
 	});
-	//     onMount( () => {
 
-	// 		let container = document.getElementById('editor');
-	// 		quill = new Quill(container, {
-	//     modules: {
-	//       toolbar: [
-	//         [{ header: [1, 2, 3, false] }],
-	//         ["bold", "italic", "underline", "strike"],
-	//         ["link", "code-block"]
-	//       ]
-	//     },
-	//     placeholder: "Type something...",
-	//     theme: "snow" // or 'bubble'
-	//   });
-	// 	})
+	// function isQuillEmpty() {
+	// 	const isQuillEmptyCheck = quill.getContents().ops[0].insert == '\n' && quill.getLength() < 2;
+	// 	console.log('::isQuillEmpty', isQuillEmptyCheck);
+	// 	return isQuillEmptyCheck;
+	// }
+	function isQuillEmpty() {
+		if ((quill.getContents()['ops'] || []).length !== 1) {
+			return false;
+		}
+		return quill.getText().trim().length === 0;
+	}
+	function sendMessage() {
+		console.log('::sendMessage', quill.getText().trim().length);
+		if (!isQuillEmpty()) {
+			dispatch('message', {
+				text: justHtmlString
+			});
+		}
+		quill.setText('');
+		// quill.setContents([]);
+		// quill.setContents([{ insert: '\n' }]);
+	}
+	function actionOnCreat(element: HTMLElement) {
+		console.log('::actionOnCreate element=', element);
+		// const editorInputObs = fromEvent(element, 'input');
+		// const editorObsEResult = editorInputObs.pipe(rxThrottle(() => interval(1000)));
+
+		// editorObsEResult.subscribe((x) => {
+		// 	console.log('::target=', x.target);
+		// 	console.log('::instanceof htmlelement', x.target instanceof HTMLElement);
+		// 	  if (x.target instanceof HTMLElement) {
+		// 	    /* event.target.style works here */
+		// 	    x.target.style.height = '' + 0;
+		// 	    x.target.style.height = x.target.scrollHeight + 'px';
+		// 	  }
+		// 	  console.log('::event', x);
+		// });
+
+		// // just version
+		// const fn2 = throttle(
+		//   function () {
+		//     console.log('::input on textarea');
+		//     this.style.height = '' + 0;
+		//     this.style.height = this.scrollHeight + 'px';
+		//   },
+		//   500,
+		//   { leading: true }
+		// );
+		// document.getElementById('texttype2').addEventListener('input', fn2, false);
+	}
 </script>
 
 <!-- <div>
 	{@html justHtml}
 </div> -->
-<div class="sveltemarkdown-wrapper">
-	<SvelteMarkdown {source} />
-</div>
 
 <div class="editor-wrapper">
-	<div bind:this={editor} />
+	<div class="left-of-editor">
+		<button class="btn">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="icon icon-tabler icon-tabler-plus"
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				stroke-width="2"
+				stroke="currentColor"
+				fill="none"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+				<path d="M12 5l0 14"></path>
+				<path d="M5 12l14 0"></path>
+			</svg>
+		</button>
+	</div>
+	<div class="quill-container">
+		<div
+			bind:this={editor}
+			use:actionOnCreat
+			on:input={() => {
+				console.log('::inputting');
+			}}
+		/>
+	</div>
+	<div class="right-of-editor">
+		<button class="btn" on:click={sendMessage}>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="icon icon-tabler icon-tabler-send"
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				stroke-width="2"
+				stroke="currentColor"
+				fill="none"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+			>
+				<path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+				<path d="M10 14l11 -11"></path>
+				<path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5"
+				></path>
+			</svg>
+		</button>
+	</div>
 </div>
-
-<!-- github.com/quilljs/quill/issues/2276 
-next todo is get user input, save as delta and html, sanitize (how?), store sanitzied
-readonly mode use html, for edit use delta.
-or something liked
-github.com/quilljs/quill/issues/2276#issuecomment-1621104821
-
-- emoji, syntax highlighting
-
-alternative:
-summernote - need jquery
-prosemirror
-more bookmarked
-
-ideal simple: safe text with only hashtag and mention that have listeners.
-
-
-approach-1:
-delta (getcontents) 
--> htmlstring (quill.root.innerhtml) 
--> markdownstring = sanitize(marked.parse(htmlstring))
--> pass to svelte-markdown
-
-- all these converstion/parsing should be put in web worker?
-
-delta (getcontents) 
--> htmlstring (quill.root.innerhtml) 
--> markdownstring = sanitize(marked.parse(htmlstring))
--> send to backend and sanitize
--> on retrieve, get from db, sanitize then send to front
--> on received, sanitize(marked.parse(response))
--> pass to svelte-markdown
-
-new msg:
-
-quill
--> delta -> sanitize if possible -> save delta
--> innerhtml -> hast from html -> hast sanitize -> save hast / mdast (mdast no style)
-
-render:
-
-get hast or delta
--> hast to html or hast to mdast
--> sanitize
--> mdast to markdown
--> sanitize
--> markdown to svelte-markdown
-
-edit: wip
-
- -->
 
 <style>
 	/* @import 'https://cdn.quilljs.com/1.3.6/quill.snow.css'; */
-	.sveltemarkdown-wrapper {
-		background-color: darkmagenta;
+	.editor-wrapper {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		grid-template-rows: 1fr;
+		grid-column-gap: 0px;
+		grid-row-gap: 0px;
+		/* min-height: 200px; */
+		max-height: 400px;
+		overflow: auto;
+	}
+	:global(.editor-wrapper .ql-container) {
+		height: auto;
+		/* assume max height 400px then calc minus toolbar - border px totla*/
+		max-height: calc(400px - 42px - 1px);
+		overflow: auto;
 	}
 </style>
