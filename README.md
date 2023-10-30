@@ -22,7 +22,7 @@
 Editor:
 
 - for now used quill so next try to add editing
-- send message using enter instead of button
+- send message using enter instead of button (codepen.io/username8978/pen/jwgebb)
 
 Gridster like feature:
 
@@ -40,7 +40,7 @@ Graph:
 
 ***
 ### things to consider:
-- quill: v1.3.7 uses outdated dom mutation insteat. potential fix in v2.0.0 if that ever get released...
+- quill: v1.3.7 uses outdated dom mutation. potential fix in v2.0.0 if that ever get released...
 - different approach to quill and svelte-markdown
     - svelte-exmarkdown with mdast and hast
     ```txt
@@ -52,6 +52,7 @@ Graph:
     ```
     - markedjs tokenzier for @mention/#hashtags with or without regular textarea
 	- regular textarea with tributejs which later converts to markdown on save/preview like github
+    - use easy-markdown-editor and since using textarea, can maybe use tributejs or other autocomplete component, it just that, hashtag/mention won't standout just like github textarea when entering mention/hashtag
 	- other full wysiwyg:
 		- basecamp trix w/ @mention/#hashtags
 		- summernotes (if ok w/ jquery) 

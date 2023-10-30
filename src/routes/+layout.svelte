@@ -57,6 +57,12 @@
 						</a>
 					</li>
 					<li>
+						<a href="/dashboard">
+							<span class="badge bg-primary-500">💀</span>
+							<span class="flex-auto">dashboard</span>
+						</a>
+					</li>
+					<li>
 						<a href="/otter">
 							<span class="badge bg-primary-500">💀</span>
 							<span class="flex-auto">otter</span>
