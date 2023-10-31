@@ -1,42 +1,61 @@
 <script lang="ts">
 	import 'gridstack/dist/gridstack.min.css';
+	import 'gridstack/dist/gridstack-extra.min.css';
+
 	import { GridStack } from 'gridstack';
 	import type { GridStackOptions, GridStackWidget } from 'gridstack';
 	import { onMount } from 'svelte';
 	import Aggrid from './Aggrid.svelte';
 	import { sanitize } from 'isomorphic-dompurify';
-	let items: GridStackWidget[] = [
-		{ x: 0, y: 0, minW: 2 },
-		{ x: 1, y: 1, content: 'hi' },
-		{
-			x: 2,
-			y: 2,
-			content: sanitize(`<div class="grid-stack-item">
-		<div class="grid-stack-item-content">
-			<div class="card-header">- Drag here -</div>
-			<div class="card">
-			    some html
-			</div>
-		</div>
-	</div>`)
-		}
+	interface WidgetItem extends GridStackWidget {
+		otherProp?: string;
+	}
+	let items2: WidgetItem[] = [
+		{ x: 0, y: 0, minW: 2, otherProp: 'aggrid' },
+		{ x: 1, y: 1, content: 'hi' }
 	];
+	// let items: GridStackWidget[] = [
+	// 	{ x: 0, y: 0, minW: 2, otherProp: 'aggrid' },
+	// 	{ x: 1, y: 1, content: 'hi' },
+	// 	{
+	// 		x: 2,
+	// 		y: 2,
+	// 		content: sanitize(`<div class="grid-stack-item">
+	// 	<div class="grid-stack-item-content">
+	// 		<div class="card-header">- Drag here -</div>
+	// 		<div class="card">
+	// 		    some html
+	// 		</div>
+	// 	</div>
+	// </div>`)
+	// 	}
+	// ];
 	let gridOptions: GridStackOptions = {
 		margin: 5,
 		// DO NOT use grid.value = GridStack.init(), see above
 		float: true,
 		cellHeight: '70px',
 		minRow: 1,
-		handle: '.card-header'
+		// column: 12, // default is 12. less needs extra.min.css more need scss
+		// see github.com/gridstack/gridstack.js#custom-columns-css
+		handle: '.card-header',
 		// resizable: { handles: 'all' } // do all sides for testing
-		// children: items
+		children: items2
 	};
 	let grid: GridStack;
 	let gridel: HTMLElement;
 	// addEvents(grid);
 	onMount(() => {
 		grid = GridStack.init(gridOptions, gridel);
-		grid.load(items);
+		grid.load(items2);
+		grid.addWidget(`<div class="grid-stack-item" gs-w="3" gs-h="3">
+		<div class="grid-stack-item-content">
+			<div class="card-header">- dyna -</div>
+			<div class="card"><svelte:component this={Aggrid} /></div>
+		</div>
+	</div>`);
+		// grid.makeWidget('<svelte:component this={Aggrid} />');
+
 		grid.on('dragstop', (event: any, element: any) => {
 			const node = element.gridstackNode;
 			console.log(

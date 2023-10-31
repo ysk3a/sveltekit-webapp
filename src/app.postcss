@@ -173,9 +173,28 @@ h1 {
   position: absolute;
   inset: 0; /* TODO change top: if you have content in nested grid */
 }
+
+:root {
+  /* --cell-width: 70px;
+  --cell-height: 70px;
+  --gridstack-bordercolor: green; */
+  --cell-size: 70px;
+  --area: 20px
+}
 .grid-stack {
-    background-color: #F7F7F7;
-    background-size : $cell-size $cell-size;
-    background-image:
-        linear-gradient(to right, $border-color 1px, transparent 1px),
-        linear-gradient(to bottom, $border-color 1px, transparent 1px);}  
+  /* background-color: #eeeeee; */
+background-image: linear-gradient(#e0e0e0 1px, transparent 1px), 
+linear-gradient(90deg, #e0e0e0 1px, transparent 0px), 
+linear-gradient(rgba(255,255,255,.3) 5px, transparent var(--cell-size)), 
+linear-gradient(90deg, rgba(255,255,255,.3) 5px, transparent var(--cell-size));
+background-size: var(--cell-size) var(--cell-size), 
+calc(8.33% + 0px) var(--cell-size), var(--area) var(--area) , var(--area) var(--area) ;
+background-position: -2px -2px, -1px -2px, -1px -1px, -1px -1px;
+
+/* background-color: #F7F7F7; 
+background-size : var(--cell-width) var(--cell-height);
+background-image:
+    linear-gradient(to right, var(--gridstack-bordercolor) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--gridstack-bordercolor) 1px, transparent 1px); */
+}  
+

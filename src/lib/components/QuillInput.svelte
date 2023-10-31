@@ -87,8 +87,8 @@
 					// [{ header: [1, 2, 3, false] }],
 					['bold', 'italic', 'underline', 'strike'],
 					['link', 'code-block']
-				],
-				'smart-breaker': true
+				]
+				// 'smart-breaker': true
 			},
 			theme: 'snow',
 			placeholder: 'Write your story...'
