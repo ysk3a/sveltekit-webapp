@@ -242,12 +242,12 @@
 		grid-row-gap: 0px;
 		/* min-height: 200px; */
 		max-height: 400px;
-		overflow: auto;
+		overflow: visible;
 	}
 	:global(.editor-wrapper .ql-container) {
 		height: auto;
 		/* assume max height 400px then calc minus toolbar - border px totla*/
 		max-height: calc(400px - 42px - 1px);
-		overflow: auto;
+		overflow: visible;
 	}
 </style>
