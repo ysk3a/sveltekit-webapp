@@ -20,6 +20,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import MessageItem from '$lib/components/MessageItem.svelte';
 	import { LoremIpsum } from 'lorem-ipsum';
+	import type { MessageType } from '../../ambient';
 	// const LoremIpsum = require("lorem-ipsum").LoremIpsum;
 
 	const lorem = new LoremIpsum({

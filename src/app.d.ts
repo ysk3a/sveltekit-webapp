@@ -23,7 +23,18 @@ declare namespace App {
 	// 	'gs-h': string;
 	// 	[key: `gs-${string}`]: string;
 	// }
-
+	// type AccordionState = {
+	// 	uniqueKey: number;
+	// 	open: boolean;
+	// }
+	// type MessageType = {
+	// 	uniqueKey: number | void;
+	// 	message: string;
+	// }
+	// type MessageMDType = {
+	// 	uniqueKey: string;
+	// 	source: string;
+	// }
 }
 
 
@@ -46,15 +57,3 @@ declare namespace App {
 // 		// mycustomattribute?: string; // You can replace any with something more specific if you like
 // 	}
 // }
-type AccordionState = {
-	uniqueKey: number;
-	open: boolean;
-}
-type MessageType = {
-	uniqueKey: number | void;
-	message: string;
-}
-type MessageMDType = {
-	uniqueKey: string;
-	source: string;
-}

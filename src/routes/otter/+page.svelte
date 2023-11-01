@@ -7,8 +7,9 @@
 	import MessageMdItem from '$lib/components/MessageMDItem.svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
-	import type { MessageMDType } from '../../app';
+	// import type { MessageMDType } from '../../app';
 	import VirtualScroll from 'svelte-virtual-scroll-list';
+	import type { MessageMDType } from '../../ambient';
 
 	let virtualList: VirtualScroll;
 	let messages: MessageMDType[] = [];

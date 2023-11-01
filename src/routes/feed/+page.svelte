@@ -20,6 +20,7 @@
 	import { onMount } from 'svelte';
 	import AccordionTest from '$lib/components/AccordionTest.svelte';
 	import { accordionStateArr } from '$lib/acoordionStore';
+	import type { AccordionState } from '../../ambient';
 
 	onMount(() => {
 		// console.log(':: feed/+page.svelte list=', list);

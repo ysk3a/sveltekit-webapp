@@ -1,6 +1,6 @@
 <script lang="ts">
-	export let uniqueKey;
-	export let height;
+	export let uniqueKey: string | number;
+	export let height: string | number;
 </script>
 
 <div style="height: {height}px">
