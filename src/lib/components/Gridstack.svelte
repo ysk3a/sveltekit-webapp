@@ -11,8 +11,11 @@
 		otherProp?: string;
 	}
 	let items2: WidgetItem[] = [
-		{ x: 0, y: 0, minW: 2, otherProp: 'aggrid' },
-		{ x: 1, y: 1, content: 'hi' }
+		{ id: '0', x: 0, y: 0, minW: 3, otherProp: 'aggrid' },
+		{ id: '1', x: 1, y: 1, content: 'hi' },
+		{ id: '2', x: 5, y: 5, otherProp: 'Counter2' },
+		{ id: '3', x: 5, y: 5 },
+		{ id: '4', x: 1, y: 2, otherProp: 'Counter2' }
 	];
 	// let items: GridStackWidget[] = [
 	// 	{ x: 0, y: 0, minW: 2, otherProp: 'aggrid' },
@@ -38,22 +41,22 @@
 		minRow: 1,
 		// column: 12, // default is 12. less needs extra.min.css more need scss
 		// see github.com/gridstack/gridstack.js#custom-columns-css
-		handle: '.card-header',
+		handle: '.card-header'
 		// resizable: { handles: 'all' } // do all sides for testing
-		children: items2
+		// children: items2
 	};
 	let grid: GridStack;
 	let gridel: HTMLElement;
 	// addEvents(grid);
 	onMount(() => {
 		grid = GridStack.init(gridOptions, gridel);
-		grid.load(items2);
-		grid.addWidget(`<div class="grid-stack-item" gs-w="3" gs-h="3">
-		<div class="grid-stack-item-content">
-			<div class="card-header">- dyna -</div>
-			<div class="card"><svelte:component this={Aggrid} /></div>
-		</div>
-	</div>`);
+		// grid.load(items2);
+		// 	grid.addWidget(`<div class="grid-stack-item" gs-w="3" gs-h="3">
+		// 	<div class="grid-stack-item-content">
+		// 		<div class="card-header">- dyna -</div>
+		// 		<div class="card"><svelte:component this={Aggrid} /></div>
+		// 	</div>
+		// </div>`);
 		// grid.makeWidget('<svelte:component this={Aggrid} />');
 
 		grid.on('dragstop', (event: any, element: any) => {
@@ -97,6 +100,13 @@
 	// 	grid.float(!grid.getFloat());
 	// 	document.querySelector('#float').innerHTML = 'float: ' + grid.getFloat();
 	// };
+	// import type { HTMLAttributes } from 'svelte/elements';
+	// import type { HTMLProps } from 'svelte/svelte-html';
+
+	// interface $$Props extends HTMLProps<'div', HTMLAttributes<any>> {
+	// 	'gs-w': string | number | undefined;
+	// 	[key: `gs-${string}`]: string | number | undefined;
+	// }
 </script>
 
 <!-- <div>
@@ -106,20 +116,20 @@
 </div>
 <br /><br /> -->
 <div class="grid-stack" bind:this={gridel}>
-	<div class="grid-stack-item">
-		<div class="grid-stack-item-content">
-			<div class="card-header">- Drag here -</div>
-			<div class="card">
-				<Aggrid />
+	{#each items2 as widget, i (widget.id)}
+		<div class="grid-stack-item" gs-w={widget.x} gs-h={widget.y}>
+			<div class="grid-stack-item-content">
+				<div class="card-header">- {widget.id} Drag here -</div>
+				<div class="card">{widget.otherProp}the rest of the panel content doesn't drag</div>
 			</div>
 		</div>
-	</div>
-	<div class="grid-stack-item" gs-w="3" gs-h="3">
+	{/each}
+	<!-- <div class="grid-stack-item" gs-w="3" gs-h="3">
 		<div class="grid-stack-item-content">
 			<div class="card-header">- Drag here -</div>
 			<div class="card">the rest of the panel content doesn't drag</div>
 		</div>
-	</div>
+	</div> -->
 </div>
 
 <style>
