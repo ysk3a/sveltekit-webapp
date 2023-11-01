@@ -2,6 +2,7 @@
 	import SvelteMarkdown from 'svelte-markdown';
 	import data from '@emoji-mart/data';
 	import { Picker } from 'emoji-mart';
+	import type EmojiMart from 'emoji-mart';
 	import { onDestroy, onMount } from 'svelte';
 	export let uniqueKey: number;
 	export let source: string = '';
@@ -14,6 +15,7 @@
 	// 	document.removeEventListener('keypress', handleKeypress)
 	// })
 	let pickerEl: HTMLElement;
+	const pick = EmojiMart.Picker.Props;
 	onMount(() => {
 		init({ data }); // should so on page scope not component scope
 	});

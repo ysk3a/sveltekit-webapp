@@ -7,15 +7,44 @@
 	import { onMount } from 'svelte';
 	import Aggrid from './Aggrid.svelte';
 	import { sanitize } from 'isomorphic-dompurify';
-	interface WidgetItem extends GridStackWidget {
-		otherProp?: string;
-	}
+	// interface WidgetItem extends GridStackWidget {
+	// 	[key: string]: string | number | undefined | boolean | GridStackOptions;
+	// 	otherProp?: string;
+	// }
+	// interface WidgetItemAttr {
+	// 	[key: string]: string | number | undefined;
+	// }
 	let items2: WidgetItem[] = [
-		{ id: '0', x: 0, y: 0, minW: 3, otherProp: 'aggrid' },
-		{ id: '1', x: 1, y: 1, content: 'hi' },
-		{ id: '2', x: 5, y: 5, otherProp: 'Counter2' },
-		{ id: '3', x: 5, y: 5 },
-		{ id: '4', x: 1, y: 2, otherProp: 'Counter2' }
+		{
+			id: '0',
+			x: 0,
+			y: 0,
+			minW: 3,
+			otherProp: 'aggrid',
+			gsAttributes: { 'gs-min-w': 0, 'gs-min-h': 0, 'gs-w': 0, 'gs-h': 0 }
+		},
+		{
+			id: '1',
+			x: 1,
+			y: 1,
+			content: 'hi',
+			gsAttributes: { 'gs-min-w': 0, 'gs-min-h': 0, 'gs-w': 1, 'gs-h': 1 }
+		},
+		{
+			id: '2',
+			x: 5,
+			y: 5,
+			otherProp: 'Counter2',
+			gsAttributes: { 'gs-min-w': 0, 'gs-min-h': 0, 'gs-w': 5, 'gs-h': 5 }
+		},
+		{ id: '3', x: 5, y: 5, gsAttributes: { 'gs-min-w': 0, 'gs-min-h': 0, 'gs-w': 5, 'gs-h': 5 } },
+		{
+			id: '4',
+			x: 1,
+			y: 2,
+			otherProp: 'Counter2',
+			gsAttributes: { 'gs-min-w': 0, 'gs-min-h': 0, 'gs-w': 1, 'gs-h': 2 }
+		}
 	];
 	// let items: GridStackWidget[] = [
 	// 	{ x: 0, y: 0, minW: 2, otherProp: 'aggrid' },
@@ -47,18 +76,8 @@
 	};
 	let grid: GridStack;
 	let gridel: HTMLElement;
-	// addEvents(grid);
 	onMount(() => {
 		grid = GridStack.init(gridOptions, gridel);
-		// grid.load(items2);
-		// 	grid.addWidget(`<div class="grid-stack-item" gs-w="3" gs-h="3">
-		// 	<div class="grid-stack-item-content">
-		// 		<div class="card-header">- dyna -</div>
-		// 		<div class="card"><svelte:component this={Aggrid} /></div>
-		// 	</div>
-		// </div>`);
-		// grid.makeWidget('<svelte:component this={Aggrid} />');
-
 		grid.on('dragstop', (event: any, element: any) => {
 			const node = element.gridstackNode;
 			console.log(
@@ -100,13 +119,8 @@
 	// 	grid.float(!grid.getFloat());
 	// 	document.querySelector('#float').innerHTML = 'float: ' + grid.getFloat();
 	// };
-	// import type { HTMLAttributes } from 'svelte/elements';
-	// import type { HTMLProps } from 'svelte/svelte-html';
-
-	// interface $$Props extends HTMLProps<'div', HTMLAttributes<any>> {
-	// 	'gs-w': string | number | undefined;
-	// 	[key: `gs-${string}`]: string | number | undefined;
-	// }
+	import GridstackItem from './GridstackItem.svelte';
+	import type { WidgetItem } from '$lib/types/gridstack';
 </script>
 
 <!-- <div>
@@ -117,31 +131,6 @@
 <br /><br /> -->
 <div class="grid-stack" bind:this={gridel}>
 	{#each items2 as widget, i (widget.id)}
-		<div class="grid-stack-item" gs-w={widget.x} gs-h={widget.y}>
-			<div class="grid-stack-item-content">
-				<div class="card-header">- {widget.id} Drag here -</div>
-				<div class="card">{widget.otherProp}the rest of the panel content doesn't drag</div>
-			</div>
-		</div>
+		<GridstackItem {widget} />
 	{/each}
-	<!-- <div class="grid-stack-item" gs-w="3" gs-h="3">
-		<div class="grid-stack-item-content">
-			<div class="card-header">- Drag here -</div>
-			<div class="card">the rest of the panel content doesn't drag</div>
-		</div>
-	</div> -->
 </div>
-
-<style>
-	.card-header {
-		cursor: move;
-		min-height: 25px;
-	}
-	.card-header:hover {
-		background-color: rgba(0, 0, 0, 0.1);
-	}
-	.card {
-		text-align: left;
-		height: 100%;
-	}
-</style>

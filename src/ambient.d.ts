@@ -25,6 +25,10 @@ declare global {
         uniqueKey: string;
         source: string;
     }
+    // interface WidgetItem extends GridStackWidget {
+    //     [key: string]: string | number | undefined | boolean | GridStackOptions;
+    //     otherProp?: string;
+    // }
 }
 
 // Adding this exports the declaration file which Typescript/CRA can now pickup:
