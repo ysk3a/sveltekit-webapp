@@ -70,7 +70,8 @@
 		minRow: 1,
 		// column: 12, // default is 12. less needs extra.min.css more need scss
 		// see github.com/gridstack/gridstack.js#custom-columns-css
-		handle: '.card-header'
+		handle: '.card-header',
+		animate: false // remove all animations always
 		// resizable: { handles: 'all' } // do all sides for testing
 		// children: items2
 	};

@@ -15,7 +15,7 @@
 	// 	document.removeEventListener('keypress', handleKeypress)
 	// })
 	let pickerEl: HTMLElement;
-	const pick = EmojiMart.Picker.Props;
+	// const pick = EmojiMart.Picker.Props;
 	onMount(() => {
 		init({ data }); // should so on page scope not component scope
 	});
