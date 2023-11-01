@@ -9,7 +9,7 @@
 	import { v4 as uuidv4 } from 'uuid';
 	// import type { MessageMDType } from '../../app';
 	import VirtualScroll from 'svelte-virtual-scroll-list';
-	import type { MessageMDType } from '../../ambient';
+	// import type { MessageMDType } from '../../ambient';
 
 	let virtualList: VirtualScroll;
 	let messages: MessageMDType[] = [];
