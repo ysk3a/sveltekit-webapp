@@ -16,6 +16,19 @@
     - remove the h-full the skeletondev automatically added with h-screen
     - add other 100vh for the `otter` route to have proper scrollbar
 
+### Nov 02 2023 12:30am
+- previous commits not about new features
+- main info:
+    - use Emoji Mart inside a child svelte component and show as the content using skeleton's popup
+    - Since Emoji Mart Picker class is js/react-webcomponent lib, need to use actions thus when trying to appendChild(picker) type does not match so made it `as Element` to make ts happy.
+    - Add event dispatcher to send event + data to parent to add/increment emoji
+- Problems:
+    - move emoji data to global. maybe that fix slow?
+        - Should move the emoji data to global like store or localstorage and be a 'singleton'
+    - Adding new emoji to reaction list shifts popup which is slow/render lags.
+    - Consider maybe not having a child component for the emoji mart and popup and instead put it in the MessageMDItem.svelte component to not use event dispatcher?
+    - On click on existing emoji in the each block add title attr and event to increase count as well.
+    - overflow of list of emoji. add button should sticky to right if overflow.
   
 ***
 ### todo:
