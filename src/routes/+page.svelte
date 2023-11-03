@@ -1,5 +1,6 @@
 <script lang="ts">
 	import MessageEditor from '$lib/components/MessageEditor.svelte';
+	import MessageMdItemMenu from '$lib/components/MessageMDItemMenu.svelte';
 	import MessageRender from '$lib/components/MessageRender.svelte';
 	import QuillEditor from '$lib/components/QuillEditor.svelte';
 	import TiptapEditor from '$lib/components/TiptapEditor.svelte';
@@ -10,6 +11,7 @@
 
 <div class="container h-full mx-auto flex justify-center items-center">
 	<div class="render-message">
+		<hr />
 		<QuillEditor />
 		<hr />
 		<TiptapSvelteWrapped />
@@ -19,6 +21,8 @@
 		<MessageEditor />
 		<br />
 		<MessageRender />
+		<hr />
+		<MessageMdItemMenu />
 	</div>
 	<div class="space-y-10 text-center flex flex-col items-center">
 		<h2 class="h2">Welcome to Skeleton.</h2>

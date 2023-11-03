@@ -29,9 +29,44 @@
     - Consider maybe not having a child component for the emoji mart and popup and instead put it in the MessageMDItem.svelte component to not use event dispatcher?
     - On click on existing emoji in the each block add title attr and event to increase count as well.
     - overflow of list of emoji. add button should sticky to right if overflow.
-  
+    - emoji list title on hover
+    - overflow emoji 
+
+### Nov 02 2023 10pm
+- (inherit issues from previous commit)
+- popup emoji picker should close on emoji selected but skeleton.dev ui library v2 limitation with popups is not flexible to add programmatically close
+    - potential temporary workaround `use:popup={someBool ? popupHover : {}}` without checking for disabled state but using ts, this is not good since skeleton.dev will error out...
+- add smui for menu component but need to change packagejson and add .npmrc as shown: `github.com/hperrin/svelte-material-ui/issues/348`
+    - menu component per message present. does not do anything and no 'copy message link'.
+- problems:
+    - Emoji adding restriction needed: if use reacted already, cannot react same emoji!
+        - for now, basic code is present just commented out.
+    - backend/proper crud
 ***
 ### todo:
+
+Message:
+
+- url/link of each message item w/ goto() by 
+```ts
+    for(var i = 0; i < items.length; i++) {
+    if(items[i].id === find) {
+        index = i;
+        break;
+    }
+	}
+```
+- on send message reset url if use message id as url but need to handle no reload/refresh of page:
+    - ```
+		https://stackoverflow.com/questions/74462823/is-there-any-way-to-use-goto-without-reloading-page-on-sveltekit
+		https://www.reddit.com/r/sveltejs/comments/12esuxe/how_do_i_change_the_url_of_the_page_in_sveltekit/
+		https://www.reddit.com/r/sveltejs/comments/12esuxe/how_do_i_change_the_url_of_the_page_in_sveltekit/
+		https://github.com/sveltejs/kit/discussions/8540
+		or
+		layout.svelte
+		https://www.reddit.com/r/sveltejs/comments/12esuxe/how_do_i_change_the_url_of_the_page_in_sveltekit/
+	```
+
 Editor:
 
 - for now used quill so next try to add editing

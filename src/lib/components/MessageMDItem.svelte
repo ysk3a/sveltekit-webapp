@@ -14,6 +14,7 @@
 	import { popup } from '@skeletonlabs/skeleton';
 
 	import EmojiPicker from './EmojiPicker.svelte';
+	import MessageMdItemMenu from './MessageMDItemMenu.svelte';
 	let opened: boolean = false;
 	interface EmojiExt {
 		shortcodes: string;
@@ -34,62 +35,18 @@
 		event: 'click',
 		target: '' + uniqueKey,
 		placement: 'right',
+		closeQuery: 'container-picker',
 		state: (e: Record<string, boolean>) => console.log('::popupstate', e)
 	};
 	// target: 'popupClick',
 
 	let pickerEl: HTMLElement;
-	// const pick = EmojiMart.Picker.Props;
-	// onMount(() => {
-	// 	init({ data }); // should so on page scope not component scope
-	// });
-	// function emojiMartAction(node: HTMLElement, params: string) {
-	// 	console.log('::emojiMartAction', node, params);
-	// 	// pickerEl.append(			new Picker({
-	// 	// 		data,
-	// 	// 		onEmojiSelect: console.log
-	// 	// 		// theme,
-	// 	// 		// i18n,
-	// 	// 		// autoFocus: true,
-	// 	// 		// dynamicWidth: true,
-	// 	// 		// locale: lang
-	// 	// 	})
-	// 	// node.append(picker); //
-	// 	node.appendChild(picker as unknown as Element);
-	// 	return {
-	// 		// update(params) {
-	// 		// 	// the value of `bar` has changed
-	// 		// },
 
-	// 		destroy() {
-	// 			// logs when element is removed
-	// 			console.log('bye');
-	// 		}
-	// 	};
-	// }
-	// function popup(node: any, popupObj: any) {
-	// 	console.log('::popup', opened, node, popupObj);
-	// 	// if (opened) {
-	// 	// 	opened = false;
-	// 	// } else {
-	// 	// 	opened = true;
-	// 	// }
-	// }
-	// function openEmojiPicker() {
-	// 	console.log('::openpicker', opened);
-	// 	if (opened) {
-	// 		opened = false;
-	// 	} else {
-	// 		opened = true;
-	// 	}
-	// }
-	// function handleSelect(emojiData: any, e: Event) {
-	// console.log('handleSelect', emojiData, e)
-	// }
 	$: console.log('::', opened);
 	type Reaction = {
 		id: string;
 		count: number;
+		reacted?: boolean;
 	};
 	let listOfReactions: Reaction[] = [];
 	function handleDispatchedSelectedEmoji(e: any) {
@@ -99,31 +56,63 @@
 			// not found
 			listOfReactions.push({
 				id: selectedEmoji.id,
-				count: 1
+				count: 1,
+				reacted: true // temporarily removed until multi user works
 			});
 		} else {
 			listOfReactions[exists].count++;
 		}
-		console.log('::handleDispatchedSelectedEmoji', e.detail.emojiSelected, exists, listOfReactions);
 		listOfReactions = listOfReactions;
+		console.log('::handleDispatchedSelectedEmoji', e.detail.emojiSelected, exists, listOfReactions);
+	}
+	function toggleEmoji(reactionId: string) {
+		const exists: number = listOfReactions.findIndex((emoji) => emoji.id === reactionId);
+		if (exists !== -1) {
+			const emoji = listOfReactions[exists];
+			if (emoji.reacted) {
+				emoji.count--;
+				emoji.reacted = false;
+				// logic here incomplete since real life flow would be different. only for developing phase
+				// for now commented out to just keep the list of reactions
+				// if (emoji.count === 0) {
+				// 	listOfReactions.splice(exists, 1);
+				// }
+			} else {
+				emoji.count++;
+				emoji.reacted = true;
+			}
+		}
+		listOfReactions = listOfReactions;
+		console.log('::toggleEmoji', exists, listOfReactions);
 	}
 </script>
 
 <div class="sveltemarkdown-wrapper">
 	<div class="uniqueKey">
 		{uniqueKey}
+		<div class="menu">
+			<MessageMdItemMenu />
+		</div>
 	</div>
+
 	<SvelteMarkdown {source} />
 	<div class="reaction-bar">
 		<div id="reaction-list" />
 		{#each listOfReactions as reaction (reaction.id)}
-			<button>
+			<button on:click={() => toggleEmoji(reaction.id)}>
 				<em-emoji id={reaction.id}></em-emoji>
 				{reaction.count}
 			</button>
 		{/each}
 		<!-- <button class="btn variant-filled" use:popup={popupClick}>Click</button> -->
-		<button class="btn variant-filled-surface" use:popup={popupClick}>pop</button>
+		<button class="btn variant-filled-surface" use:popup={popupClick}>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"
+				><path
+					fill="currentColor"
+					d="M13 7a6 6 0 1 0-5.746 5.995A4.472 4.472 0 0 1 7.027 12H7a5 5 0 1 1 5-5v.027c.345.039.678.116.995.227C12.998 7.17 13 7.085 13 7Zm-5.888 3.498c.084-.368.212-.719.38-1.046a2.493 2.493 0 0 1-2.356-.785a.5.5 0 0 0-.745.666a3.493 3.493 0 0 0 2.72 1.165ZM6 6a.75.75 0 1 1-1.5 0A.75.75 0 0 1 6 6Zm2.75.75a.75.75 0 1 0 0-1.5a.75.75 0 0 0 0 1.5ZM15 11.5a3.5 3.5 0 1 1-7 0a3.5 3.5 0 0 1 7 0Zm-3-2a.5.5 0 0 0-1 0V11H9.5a.5.5 0 0 0 0 1H11v1.5a.5.5 0 0 0 1 0V12h1.5a.5.5 0 0 0 0-1H12V9.5Z"
+				/></svg
+			></button
+		>
 		<!-- on:click={openEmojiPicker} -->
 		<!-- <button type="button" class="btn variant-filled" on:click={openEmojiPicker}>open{opened}</button
 		> -->
@@ -151,6 +140,7 @@
 	}
 	.uniqueKey {
 		background-color: #41255c;
+		position: relative;
 	}
 	.sveltemarkdown-wrapper {
 		/* Don't set margin top and bottom together! It will break size counting */
@@ -158,5 +148,10 @@
 		color: black;
 		background-color: #9779b4;
 		border-radius: 20px;
+	}
+	.menu {
+		position: absolute;
+		top: -8px;
+		right: 0px;
 	}
 </style>
