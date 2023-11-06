@@ -10,13 +10,26 @@
 	// import type { MessageMDType } from '../../app';
 	import VirtualScroll from 'svelte-virtual-scroll-list';
 	// import type { MessageMDType } from '../../ambient';
+	import { afterUpdate, tick } from 'svelte';
 
 	let virtualList: VirtualScroll;
 	let messages: MessageMDType[] = [];
 	let md: string = '';
-
+	let vs: HTMLElement;
+	afterUpdate(() => {
+		console.log('afterUpdate');
+		if (messages) scrollToBottom(vs);
+	});
+	const scrollToBottom = async (node: HTMLElement) => {
+		node.scroll({ top: node.scrollHeight, behavior: 'smooth' });
+		// virtualList.scrollToBottom();
+	};
+	$: if (messages && vs) {
+		console.log('tick');
+		scrollToBottom(vs);
+	}
 	onMount(() => {
-		for (let i = 0; i < 10; i++) {
+		for (let i = 0; i < 100; i++) {
 			messages.push({
 				uniqueKey: `${i}`,
 				source: `${i}`
@@ -32,6 +45,7 @@
 		};
 		messages.push(newMsg);
 		messages = messages;
+		console.log('::addMsg', virtualList);
 		if (virtualList) {
 			virtualList.scrollToBottom();
 		}
@@ -46,7 +60,7 @@
 <!-- <div class="sveltemarkdown-wrapper">
 </div> -->
 <div class="two-side">
-	<div class="vs">
+	<div class="vs" bind:this={vs}>
 		<VirtualScroll bind:this={virtualList} data={messages} key="uniqueKey" let:data>
 			<div slot="header">This is a header</div>
 			<MessageMdItem {...data} />

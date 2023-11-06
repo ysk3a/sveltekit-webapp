@@ -43,6 +43,17 @@
         - for now, basic code is present just commented out.
     - backend/proper crud
 ***
+
+### Nov 06 2023 4pm
+- See svelte-markdown-text repo where I use textarea and svelte-markdown to render custom renderer.
+    - see the readme for that repo. 
+    - summary, I could drop quill and use a textarea/other md editor with svelte-markdown in exchange for quill-mention.
+        - so would need to add custom autocomplete or use another library for mentioning
+    - difference with quill i am sending html string to svelte-markdown while svelte-markdown-text repo sending markdown string.
+- problems:
+    - virtualscroll.scrolltobottom does not work any more. the overflow not there.
+        - for now have to use `svelte.dev/repl/937a3a035a1f41178714cd7e2e21ca7a?version=3.48.0` approach
+    - virtual scroll doesn't render more than 29 items for the /otter page. why?
 ### todo:
 
 Message:

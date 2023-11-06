@@ -61,6 +61,7 @@
 <span data-value="Fredrik Sundqvist" data-id="1" data-denotation-char="@" data-index="0" class="mention"><span>@Fredrik Sundqvist</span></span>
 `;
 	let justHtml = '';
+	let text = '';
 	$: source = ''; //td.turndown(justHtml);
 	$: console.log('::source', source);
 	$: src2 = '';
@@ -98,7 +99,7 @@
 			// async // if using marked.parse
 			maxOne++;
 			var delta = quill.getContents();
-			var text = quill.getText();
+			text = quill.getText();
 			// const clean = DOMPurify.sanitize(dirty);
 			// can't tell if sanitize is sanitizing.
 			justHtmlString = sanitize(quill.root.innerHTML);
@@ -135,10 +136,11 @@
 		return quill.getText().trim().length === 0;
 	}
 	function sendMessage() {
-		console.log('::sendMessage', quill.getText().trim().length);
+		console.log('::sendMessage', quill.getText().trim().length, text, justHtmlString);
 		if (!isQuillEmpty()) {
 			dispatch('message', {
 				text: justHtmlString
+				// text: quill.getText().trim()
 			});
 		}
 		quill.setText('');

@@ -15,6 +15,16 @@
 
 	import EmojiPicker from './EmojiPicker.svelte';
 	import MessageMdItemMenu from './MessageMDItemMenu.svelte';
+	import { marked, type MarkedOptions } from 'marked';
+	import {
+		mentionNamedTokenizerExtension,
+		type CustomRenderer,
+		hashtagTokenizerExtension
+	} from './MyMarkedExtensions';
+	import Mention2 from './Mention2.svelte';
+	import Hashtag from './Hashtag.svelte';
+	import Mention from './Mention.svelte';
+
 	let opened: boolean = false;
 	interface EmojiExt {
 		shortcodes: string;
@@ -85,6 +95,24 @@
 		listOfReactions = listOfReactions;
 		console.log('::toggleEmoji', exists, listOfReactions);
 	}
+	marked.use({
+		extensions: [
+			hashtagTokenizerExtension,
+			mentionNamedTokenizerExtension
+			// mentionTokenizerExtension,
+		]
+	});
+	// marked.setOptions(…)
+	const options: MarkedOptions = marked.defaults;
+
+	// renderers type not happy since custom renderers not exist in svelte-markdown's
+	// Partial<Renderers>. But this seems to mostly hide then fix. Is there better way??
+	const renderers: CustomRenderer = {
+		mentioning: Mention2,
+		hashtaging: Hashtag
+		// '@': Mention,
+	};
+	$: console.log('::mditem, source', source);
 </script>
 
 <div class="sveltemarkdown-wrapper">
@@ -95,7 +123,8 @@
 		</div>
 	</div>
 
-	<SvelteMarkdown {source} />
+	<SvelteMarkdown {source} {options} {renderers} />
+
 	<div class="reaction-bar">
 		<div id="reaction-list" />
 		{#each listOfReactions as reaction (reaction.id)}
